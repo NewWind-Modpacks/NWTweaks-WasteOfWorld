@@ -1,0 +1,9 @@
+{
+	"java.configuration.runtimes": [
+		{"name":"JavaSE-17", "path": "/usr/lib/jvm/java-17-temurin"},
+	],
+	"java.jdt.ls.java.home": "/usr/lib/jvm/java-17-temurin/",
+	"java.configuration.updateBuildConfiguration": "automatic",
+	"java.compile.nullAnalysis.mode": "disabled",
+	"java.dependency.packagePresentation": "hierarchical"
+}

@@ -1,0 +1,11 @@
+{
+  "death.attack.radiation": "%1$s's DNA was scrambled",
+  "death.attack.radiation.player": "%1$s's DNA was scrambled whilst trying to escape %2$s",
+  "death.attack.toxic_gas": "%1$s inhaled toxic gas",
+  "death.attack.toxic_gas.player": "%1$s's inhaled toxic gas whilst trying to escape %2$s",
+  "enchantment.nwtweaks.deep_pockets": "Deep Pockets",
+  "item.nwtweaks.broken_iron_sword": "Broken Sword",
+  "item.nwtweaks.plant_fiber": "Plant Fibers",
+  "item.nwtweaks.plant_string": "Plant String",
+  "message.nwtweaks.machine_timeout": "Cannot use Compact Machines at night"
+}

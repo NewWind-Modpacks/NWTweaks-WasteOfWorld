@@ -1,0 +1,11 @@
+{
+  "death.attack.radiation": "El ADN de %1$s fue deconstruido",
+  "death.attack.radiation.player": "El ADN de %1$s fue deconstruido intentando escapar de %2$s",
+  "death.attack.toxic_gas": "%1$s respiró gas tóxico",
+  "death.attack.toxic_gas.player": "%1$s's respiró gas tóxico intentando escapar de %2$s",
+  "enchantment.nwtweaks.deep_pockets": "Bolsillos profundos",
+  "item.nwtweaks.broken_iron_sword": "Espada rota",
+  "item.nwtweaks.plant_fiber": "Fibras de planta",
+  "item.nwtweaks.plant_string": "Hilo de planta",
+  "message.nwtweaks.machine_timeout": "No es posible usar máquinas compactas de noche"
+}

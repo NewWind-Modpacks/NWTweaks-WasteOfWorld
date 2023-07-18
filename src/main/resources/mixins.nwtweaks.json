@@ -1,0 +1,25 @@
+{
+  "package": "com.newwind.nwtweaks.mixin",
+  "refmap": "mixins.nwtweaks.refmap.json",
+  "mixins": [
+    "BackpackedItem",
+    "BackpackedServerPlayHandler",
+    "CMCompactMachineBlock",
+    "FeathersCommonEvents",
+    "HitMarkerConstructor",
+    "MinecraftLivingEntity",
+    "MinecraftSnowLayer",
+    "TinyInvUtils"
+  ],
+  "client": [
+    "client.BackpackedClientEvents",
+    "client.FeathersClientModBusEvents",
+    "client.HitMarkerClientConstructor",
+    "client.KeyboardHandler",
+    "client.MinecraftClient",
+    "client.MinecraftGameRenderer",
+    "client.MinecraftLocalPlayer",
+    "client.TinyInvRenderUtils"
+  ],
+  "minVersion": "0.8"
+}

@@ -140,34 +140,50 @@ repositories {
 
 dependencies {
 
-    minecraft 'net.minecraftforge:forge:1.19.2-43.2.13'
+    minecraft 'net.minecraftforge:forge:1.19.2-43.3.0'
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
-    implementation fg.deobf("curse.maven:feathers-699933:4546292")
-    implementation fg.deobf("curse.maven:unionlib-367806:4547568")
-    implementation fg.deobf("curse.maven:survive-367337:4552172")
-    implementation fg.deobf("curse.maven:tinyinv-455299:4401235")
     implementation fg.deobf("com.ccr4ft3r.actionsofstamina:actions-of-stamina-1.19.2:0.5.0")
-    implementation fg.deobf("curse.maven:compact-machines-224218:3907274")
-    implementation fg.deobf("curse.maven:framework-549225:4287474")
-    implementation fg.deobf("curse.maven:mrcrayfishs-gun-mod-289479:4390782")
-    implementation fg.deobf("curse.maven:cloth-config-348521:3972423")
-    implementation fg.deobf("curse.maven:playeranimator-658587:4418149")
+    implementation fg.deobf("com.illusivesoulworks.radiantgear:radiantgear-forge-1.19.2:2.0.2")
+
+    implementation fg.deobf("curse.maven:backpacked-352835:4725664")
     implementation fg.deobf("curse.maven:better-combat-by-daedelus-639842:4534619")
-    implementation fg.deobf("curse.maven:hitmarker-reforged-689192:4034599")
+    implementation fg.deobf("curse.maven:classic-bars-317642:4430475")
+    implementation fg.deobf("curse.maven:cloth-config-348521:3972423")
+    implementation fg.deobf("curse.maven:compact-machines-224218:3907274")
     implementation fg.deobf("curse.maven:curios-309927:4523009")
-    implementation fg.deobf("curse.maven:backpacked-352835:4480724")
+    implementation fg.deobf("curse.maven:engulfing-darkness-514138:4073396")
+    implementation fg.deobf("curse.maven:eyes-in-the-darkness-304719:3872340")
+    implementation fg.deobf("curse.maven:feathers-699933:4573576")
+    implementation fg.deobf("curse.maven:framework-549225:4718247")
+    implementation fg.deobf("curse.maven:geckolib-388172:4407241")
+    implementation fg.deobf("curse.maven:hardcore-torches-forge-576846:4676485")
+    implementation fg.deobf("curse.maven:hitmarker-reforged-689192:4034599")
     implementation fg.deobf("curse.maven:kiwi-303657:4451128")
-    implementation fg.deobf("curse.maven:snow-real-magic-308663:4454932")
+    implementation fg.deobf("curse.maven:mrcrayfishs-gun-mod-289479:4718583")
     implementation fg.deobf("curse.maven:mutil-351914:3941314")
+    implementation fg.deobf("curse.maven:new-thin-air-878379:4843766")
+    implementation fg.deobf("curse.maven:overflowing-bars-852662:4515133")
+    implementation fg.deobf("curse.maven:parcool-482378:4772420")
+    implementation fg.deobf("curse.maven:playeranimator-658587:4418149")
+    implementation fg.deobf("curse.maven:puffish-skills-835091:4744360")
+    implementation fg.deobf("curse.maven:puzzles-lib-495476:4600775")
+    implementation fg.deobf("curse.maven:sanity-descent-into-madness-876448:4632886")
+    implementation fg.deobf("curse.maven:snow-real-magic-308663:4779691")
+    implementation fg.deobf("curse.maven:survive-367337:4552172")
     implementation fg.deobf("curse.maven:tetra-289712:4487237")
     implementation fg.deobf("curse.maven:the-lost-cities-269024:4554187")
+    implementation fg.deobf("curse.maven:tinyinv-455299:4401235")
+    implementation fg.deobf("curse.maven:unionlib-367806:4547568")
 
     runtimeOnly fg.deobf("curse.maven:configured-457570:4462837")
-    runtimeOnly fg.deobf("curse.maven:parcool-482378:4513003")
-    runtimeOnly fg.deobf("curse.maven:reforgium-853424:4505759")
+    runtimeOnly fg.deobf("curse.maven:curious-lanterns-621377:4538036")
     runtimeOnly fg.deobf("curse.maven:connectedness-853916:4506203")
+    runtimeOnly fg.deobf("curse.maven:first-aid-276837:3952683")
+    runtimeOnly fg.deobf("curse.maven:lucent-493280:4085139")
+    runtimeOnly fg.deobf("curse.maven:puzzles-lib-495476:4600775")
+    runtimeOnly fg.deobf("curse.maven:reforgium-853424:4505759")
 
     runtimeOnly fg.deobf("curse.maven:spark-361579:4505309")
 }

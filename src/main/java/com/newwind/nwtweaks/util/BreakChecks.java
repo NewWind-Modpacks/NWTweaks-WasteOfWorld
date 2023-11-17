@@ -106,7 +106,7 @@ public class BreakChecks {
 	}
 
 	private static TagKey<Block> pickTier(TagKey<Block> currentTag, TagKey<Block> newTag) {
-		var currentNum = tierMap.get(currentTag);
+		Integer currentNum = currentTag == null ? null : tierMap.get(currentTag);
 		var newNum = tierMap.get(newTag);
 		if (currentNum == null) {
 			if (newNum == null)

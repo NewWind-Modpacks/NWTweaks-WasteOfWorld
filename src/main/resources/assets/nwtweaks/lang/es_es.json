@@ -1,4 +1,7 @@
 {
+  "attribute.name.nwtweaks.bc-attack_range": "Multiplicador de rango de ataque",
+  "attribute.name.nwtweaks.headshot_damage": "Daño de disparo a la cabeza adicional",
+  "attribute.name.nwtweaks.ranged_armor_piercing": "Ranged Armor Piercing",
   "death.attack.radiation": "El ADN de %1$s fue deconstruido",
   "death.attack.radiation.player": "El ADN de %1$s fue deconstruido intentando escapar de %2$s",
   "death.attack.toxic_gas": "%1$s respiró gas tóxico",

@@ -23,8 +23,4 @@ public class Blocks {
 //													.sound(SoundType.SNOW)
 //													.isViewBlocking((p_187417_, p_187418_, p_187419_) -> false)));
 
-	public static void register(IEventBus bus) {
-//		VANILLA_BLOCKS.register(bus);
-	}
-
 }

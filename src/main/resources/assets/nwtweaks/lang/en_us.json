@@ -1,4 +1,7 @@
 {
+  "attribute.name.nwtweaks.bc-attack_range": "Attack Range Multiplier",
+  "attribute.name.nwtweaks.headshot_damage": "Additional Headshot Damage",
+  "attribute.name.nwtweaks.ranged_armor_piercing": "Ranged Armor Piercing",
   "death.attack.radiation": "%1$s's DNA was scrambled",
   "death.attack.radiation.player": "%1$s's DNA was scrambled whilst trying to escape %2$s",
   "death.attack.toxic_gas": "%1$s inhaled toxic gas",

@@ -21,8 +21,4 @@ public class Enchantments {
 									Backpacked.ENCHANTMENT_TYPE
 					));
 
-	public static void register(IEventBus bus) {
-		ENCHANTMENTS.register(bus);
-	}
-
 }

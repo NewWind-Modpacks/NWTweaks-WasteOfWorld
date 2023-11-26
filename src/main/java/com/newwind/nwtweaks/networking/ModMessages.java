@@ -1,7 +1,9 @@
 package com.newwind.nwtweaks.networking;
 
 import com.newwind.nwtweaks.NWTweaks;
+import com.newwind.nwtweaks.networking.packet.S2CDiscoveredPills;
 import com.newwind.nwtweaks.networking.packet.S2CIsUnderground;
+import com.newwind.nwtweaks.networking.packet.S2CRedDweller;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
@@ -11,7 +13,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 
 public class ModMessages {
 
-	private static SimpleChannel INSTANCE;
+	public static SimpleChannel INSTANCE;
 
 	private static int packetId = 0;
 	private static int id() {
@@ -32,6 +34,18 @@ public class ModMessages {
 						.decoder(S2CIsUnderground::new)
 						.encoder(S2CIsUnderground::toBytes)
 						.consumerMainThread(S2CIsUnderground::handle)
+						.add();
+
+		net.messageBuilder(S2CRedDweller.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+						.decoder(S2CRedDweller::new)
+						.encoder(S2CRedDweller::toBytes)
+						.consumerMainThread(S2CRedDweller::handle)
+						.add();
+
+		net.messageBuilder(S2CDiscoveredPills.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+						.decoder(S2CDiscoveredPills::new)
+						.encoder(S2CDiscoveredPills::toBytes)
+						.consumerMainThread(S2CDiscoveredPills::handle)
 						.add();
 	}
 

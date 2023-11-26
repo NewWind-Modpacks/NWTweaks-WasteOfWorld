@@ -1,6 +1,8 @@
 package com.newwind.nwtweaks.networking.packet;
 
+import com.newwind.nwtweaks.capability.IsUndergroundProvider;
 import com.newwind.nwtweaks.client.NWClient;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -26,7 +28,8 @@ public class S2CIsUnderground {
 	public boolean handle(Supplier<NetworkEvent.Context> supplier) {
 		NetworkEvent.Context context = supplier.get();
 		context.enqueueWork(() -> {
-			NWClient.isUnderground = this.isUnderground;
+			assert Minecraft.getInstance().player != null;
+			Minecraft.getInstance().player.getCapability(IsUndergroundProvider.CAPABILITY).ifPresent(isUnderground1 -> isUnderground1.setUnderground(this.isUnderground ? 1 : 0));
 		});
 		return true;
 	}

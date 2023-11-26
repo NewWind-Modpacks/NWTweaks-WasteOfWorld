@@ -7,16 +7,24 @@ public class IsUnderground {
 
 	private final String NBT_NAME = "isUnderground";
 
-	private boolean isUnderground;
+	private int undergroundTime;
 	private int nextCheck;
 
 
 	public boolean isUnderground() {
-		return isUnderground;
+		return undergroundTime > 0;
 	}
 
-	public void setUnderground(boolean underground) {
-		isUnderground = underground;
+	public int getTime() {
+		return this.undergroundTime;
+	}
+
+	public void setUnderground(int underground) {
+		undergroundTime = underground;
+	}
+
+	public void addTime(int amount) {
+		undergroundTime += amount;
 	}
 
 	public int getNextCheck() {
@@ -32,11 +40,11 @@ public class IsUnderground {
 	}
 
 	public void serialize(CompoundTag nbt) {
-		nbt.putBoolean(NBT_NAME, isUnderground);
+		nbt.putInt(NBT_NAME, undergroundTime);
 	}
 
 	public void deserialize(CompoundTag nbt) {
-		isUnderground = nbt.getBoolean(NBT_NAME);
+		undergroundTime = nbt.getInt(NBT_NAME);
 		nextCheck = 0;
 	}
 

@@ -1,0 +1,6 @@
+{
+  "parent": "nwtweaks:block/overlayed_template",
+  "textures": {
+    "overlay": "nwtweaks:block/chipped_2"
+  }
+}

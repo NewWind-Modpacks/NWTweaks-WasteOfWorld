@@ -5,6 +5,9 @@ import com.newwind.nwtweaks.NWConfig;
 import com.newwind.nwtweaks.capability.IsUndergroundProvider;
 import com.newwind.nwtweaks.client.NWClient;
 import com.newwind.nwtweaks.registries.Enchantments;
+import com.stereowalker.survive.Survive;
+import com.stereowalker.survive.core.SurviveEntityStats;
+import com.stereowalker.survive.world.entity.ai.attributes.SAttributes;
 import mcjty.lostcities.api.ILostChunkInfo;
 import mcjty.lostcities.api.ILostCities;
 import mcjty.lostcities.api.ILostCityInformation;
@@ -20,29 +23,27 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
 import nuparu.tinyinv.config.ServerConfig;
 import nuparu.tinyinv.utils.Utils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 
 public class CommonUtils {
+	public static final String AIR_BLADDER_TAG_OXYGEN_AMOUNT = "oxygen_amount";
 	private static boolean registered = false;
 	private static ILostCities lostCities;
-	public static final String AIR_BLADDER_TAG_OXYGEN_AMOUNT = "oxygen_amount";
 
-	public static void register() {
+	public static void registerLostCities() {
 		if (ModList.get().isLoaded("lostcities")) {
-			registerInternal();
+			registerLostCitiesInternal();
 		}
 	}
 
-	private static void registerInternal() {
+	private static void registerLostCitiesInternal() {
 		if (registered) {
 			return;
 		}
@@ -96,11 +97,20 @@ public class CommonUtils {
 		return slot.container == player.getInventory() && tinyInvShouldBeRemoved(slot.getSlotIndex(), player, container, accountBackpack);
 	}
 
+	public static double getEffectivePlayerTemperature(Player player) {
+		double effTemp = SurviveEntityStats.getTemperatureStats(player).getTemperatureLevel() - Survive.DEFAULT_TEMP;
+
+		if (effTemp < 0)
+			effTemp /= player.getAttributeValue(SAttributes.COLD_RESISTANCE);
+		else if (effTemp > 0)
+			effTemp /= player.getAttributeValue(SAttributes.HEAT_RESISTANCE);
+
+		return effTemp;
+	}
+
 	public static boolean isUnderground(LivingEntity living) {
-		if (living.level.isClientSide && living instanceof LocalPlayer)
-			return NWClient.isUnderground;
 		AtomicBoolean isUnderground = new AtomicBoolean(false);
-		living.getCapability(IsUndergroundProvider.IS_UNDERGROUND).ifPresent(undergroundObject -> {
+		living.getCapability(IsUndergroundProvider.CAPABILITY).ifPresent(undergroundObject -> {
 			isUnderground.set(undergroundObject.isUnderground());
 		});
 		return isUnderground.get();
@@ -120,14 +130,14 @@ public class CommonUtils {
 
 	public static boolean isUnderground(Level level, BlockPos blockPos) {
 		int y = blockPos.getY();
-		if ( isInLostCityBuilding(level, blockPos) )
+		if (isInLostCityBuilding(level, blockPos))
 			return false;
 
-		if ( y < NWConfig.Common.UNDERGROUND_INNER_HEIGHT.get() )
+		if (y < NWConfig.Common.UNDERGROUND_INNER_HEIGHT.get())
 			return true;
 
 		int y_top = NWConfig.Common.UNDERGROUND_OUTER_HEIGHT.get();
-		if ( y > y_top || level.getBrightness(LightLayer.SKY, blockPos) > 0 )
+		if (y > y_top || level.getBrightness(LightLayer.SKY, blockPos) > 0)
 			return false;
 
 		int y_offset = Math.max(NWConfig.Common.UNDERGROUND_HEIGHT_OFFSET.get(), 1);
@@ -139,46 +149,6 @@ public class CommonUtils {
 				return true;
 
 		return false;
-	}
-
-	public static float getCaveAirPercentAroundPlayer(Player player) { // Default radius
-		return getCaveAirPercentAroundPlayer(player, 10);
-	}
-
-	public static float getCaveAirPercentAroundPlayer(Player player, int radius) {
-		Level level = player.getLevel();
-		ArrayList<BlockState> blocks = new ArrayList<>();
-
-		int totalBlocks = 0;
-		int caveAirBlocks = 0;
-
-		for (int x = -radius; x < radius; x++) {
-			for (int y = -radius; y < radius; y++) {
-				for (int z = -radius; z < radius; z++) {
-					blocks.add(level.getBlockState(new BlockPos(
-									player.getEyePosition().x + x,
-									player.getEyePosition().y + y,
-									player.getEyePosition().z + z
-					)));
-				}
-			}
-		}
-
-		for (BlockState block : blocks) {
-			if (!(block.getBlock() == Blocks.AIR || block.getBlock() == Blocks.CAVE_AIR || block.getBlock() == Blocks.VOID_AIR))
-				continue;
-
-			totalBlocks++;
-			if (block.getBlock() == Blocks.CAVE_AIR) {
-				caveAirBlocks++;
-			}
-		}
-
-		if (totalBlocks == 0) { // Don't divide by 0
-			return 0;
-		}
-
-		return ((float) caveAirBlocks / totalBlocks) * 100;
 	}
 
 	public static boolean isInLostCityBuilding(Level level, BlockPos blockPos) {

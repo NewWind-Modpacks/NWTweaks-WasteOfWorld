@@ -30,7 +30,7 @@ public class SanityClassicBar extends BarOverlayImpl {
 //	private static final Color HYDRO_COLOR = Color.from(97, 185, 255);
 //	private static final Color HYDRO_THIRSTY_COLOR = Color.from(194, 246, 153);
 	public SanityClassicBar() {
-		super("sanity");
+		super("sanitydim");
 	}
 
 	private static float getSanity(Player player) {
@@ -82,7 +82,7 @@ public class SanityClassicBar extends BarOverlayImpl {
 			if (abPassiveIncrease > 0) {
 				this.bindIconTexture();
 
-				boolean useBigArrows = abPassiveIncrease >= 2.0E-4F;
+				boolean useBigArrows = abPassiveIncrease >= 2.0E-4F * NWConfig.Client.ARROW_PASSIVE_SCALE.get();
 				boolean isRightArrow = passiveIncrease < 0F;
 				if (this.rightHandSide())
 					isRightArrow = !isRightArrow;
@@ -146,12 +146,13 @@ public class SanityClassicBar extends BarOverlayImpl {
 
 	private void tick(Player player) {
 		float deltaTick = Minecraft.getInstance().getDeltaFrameTime();
+		double sanityScale = NWConfig.Client.ARROW_PASSIVE_SCALE.get();
 		ISanity sanityCap = player.getCapability(SanityProvider.CAP).orElse(null);
 		if (sanityCap != null) {
 
 			this.flashTimer = Mth.clamp(this.flashTimer - deltaTick, 0F, 20F);
 			float sanityDifference = getSanity(player) - this.lastSanity;
-			if (Math.abs(sanityDifference) > 0.01F) {
+			if (Math.abs(sanityDifference) > 0.01F * sanityScale) {
 				this.highlightSanity = Math.max(this.highlightSanity * (this.flashTimer / 20F) + (-sanityDifference * WIDTH), 0F);
 				this.flashTimer = 20F;
 			}
@@ -164,15 +165,19 @@ public class SanityClassicBar extends BarOverlayImpl {
 			if (passiveCap.getPassiveIncrease() != 0F)
 				this.arrowTimer -= deltaTick;
 			while (this.arrowTimer < 0F)
-				this.arrowTimer += Math.abs(passiveCap.getPassiveIncrease()) >= 2.0E-4F ? 24F : 16F;
+				this.arrowTimer += Math.abs(passiveCap.getPassiveIncrease()) >= 2.0E-4F * sanityScale ? 24F : 16F;
 		}
 	}
 
 	// Code from SanityDIM's GuiHandler class
 	private int getArrowOffset(float abPassiveIncrease) {
+		double sanityScale = NWConfig.Client.ARROW_PASSIVE_SCALE.get();
+
+		if (abPassiveIncrease < 0.000025F * sanityScale)
+			return 0;
 
 		int arrowOffset;
-		if (abPassiveIncrease < 2.0E-4F) {
+		if (abPassiveIncrease < 2.0E-4F * sanityScale) {
 			arrowOffset = (int) this.arrowTimer / 4 % 2;
 			arrowOffset *= this.arrowTimer > 8.0F ? 1 : -1;
 		} else {

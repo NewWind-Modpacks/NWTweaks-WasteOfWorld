@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class IsUndergroundProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
 
-	public static final Capability<IsUnderground> IS_UNDERGROUND = CapabilityManager.get(new CapabilityToken<IsUnderground>() {});
+	public static final Capability<IsUnderground> CAPABILITY = CapabilityManager.get(new CapabilityToken<IsUnderground>() {});
 
 	private IsUnderground undergroundObject = null;
 	private final LazyOptional<IsUnderground> optional = LazyOptional.of(this::getUndergroundObject);
@@ -28,7 +28,7 @@ public class IsUndergroundProvider implements ICapabilityProvider, INBTSerializa
 
 	@Override
 	public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-		if (cap == IS_UNDERGROUND)
+		if (cap == CAPABILITY)
 			return optional.cast();
 
 		return LazyOptional.empty();

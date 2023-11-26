@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "axis=y,stage=0": { "model": "nwtweaks:block/chipped/deepslate_y0" },
+    "axis=y,stage=1": { "model": "nwtweaks:block/chipped/deepslate_y1" },
+    "axis=y,stage=2": { "model": "nwtweaks:block/chipped/deepslate_y2" },
+    "axis=x,stage=0": { "model": "nwtweaks:block/chipped/deepslate_xz0", "x": 90, "y": 90 },
+    "axis=x,stage=1": { "model": "nwtweaks:block/chipped/deepslate_xz1", "x": 90, "y": 90 },
+    "axis=x,stage=2": { "model": "nwtweaks:block/chipped/deepslate_xz2", "x": 90, "y": 90 },
+    "axis=z,stage=0": { "model": "nwtweaks:block/chipped/deepslate_xz0", "x": 90 },
+    "axis=z,stage=1": { "model": "nwtweaks:block/chipped/deepslate_xz1", "x": 90 },
+    "axis=z,stage=2": { "model": "nwtweaks:block/chipped/deepslate_xz2", "x": 90 }
+  }
+}

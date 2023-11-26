@@ -1,0 +1,6 @@
+{
+  "parent": "nwtweaks:block/overlayed_pillar_horizontal_template",
+  "textures": {
+    "overlay": "nwtweaks:block/chipped_0"
+  }
+}

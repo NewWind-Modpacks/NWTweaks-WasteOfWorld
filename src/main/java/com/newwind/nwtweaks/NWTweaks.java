@@ -35,7 +35,7 @@ public class NWTweaks {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 
         Items.ITEMS.register(bus);
-//        Blocks.BLOCKS.register(bus);
+        Blocks.BLOCKS.register(bus);
         Attributes.ATTRIBUTES.register(bus);
         Enchantments.ENCHANTMENTS.register(bus);
 

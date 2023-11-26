@@ -1,14 +1,11 @@
 package com.newwind.nwtweaks.mixin;
 
 import com.newwind.nwtweaks.NWConfig;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import se.mickelus.tetra.items.modular.impl.bow.ModularBowItem;
 import se.mickelus.tetra.items.modular.impl.crossbow.ModularCrossbowItem;
 
 @Mixin(ModularCrossbowItem.class)

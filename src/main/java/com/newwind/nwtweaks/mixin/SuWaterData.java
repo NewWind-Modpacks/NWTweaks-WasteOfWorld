@@ -9,7 +9,9 @@ import org.spongepowered.asm.mixin.Unique;
 @Mixin(WaterData.class)
 public class SuWaterData implements IWaterData {
 
-	@Shadow
+	@Shadow(
+					remap = false
+	)
 	private float waterExhaustionLevel;
 
 	@Override

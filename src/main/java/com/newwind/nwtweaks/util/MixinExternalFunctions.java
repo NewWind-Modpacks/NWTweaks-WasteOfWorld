@@ -90,7 +90,7 @@ public class MixinExternalFunctions {
 			Vec3 position = entity.getEyePosition();
 			boolean isUnderground;
 			if (entity instanceof LocalPlayer)
-				isUnderground = NWClient.isUnderground;
+				isUnderground = CommonUtils.isUnderground(entity);
 			else
 				isUnderground = CommonUtils.isUnderground(world, new BlockPos(position));
 

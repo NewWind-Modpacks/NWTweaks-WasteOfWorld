@@ -8,6 +8,7 @@ import com.newwind.nwtweaks.client.gui.SanityClassicBar;
 import com.newwind.nwtweaks.client.world.item.renderer.AirBladderDecorator;
 import com.newwind.nwtweaks.networking.ModMessages;
 import com.newwind.nwtweaks.util.CommonUtils;
+import com.newwind.nwtweaks.world.items.PillItem;
 import fuzs.thinair.init.ModRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.FogRenderer;
@@ -17,77 +18,57 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.client.event.RegisterItemDecorationsEvent;
-import net.minecraftforge.client.event.ViewportEvent;
+import net.minecraftforge.client.event.*;
+import net.minecraftforge.client.gui.overlay.ForgeGui;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import tfar.classicbar.EventHandler;
 
+import java.util.Objects;
+
 @Mod.EventBusSubscriber(modid = NWTweaks.MODID, value = Dist.CLIENT)
 public class ClientEvents {
 
 	private static double nameDrawHeight = 0.0D;
 
-//	@SubscribeEvent
-//	public static void onRenderTick(RenderTickEvent event) {
-//		Minecraft mc = Minecraft.getInstance();
-//		if (mc.level != null) {
-//			if (!isShaderApplied) {
-//				GameRenderer renderer = mc.gameRenderer;
-//				renderer.loadEffect(new ResourceLocation(NWTweaks.MODID, "shaders/post/winter.json"));
-//				isShaderApplied = true;
-//			}
-//		} else
-//			refreshShader();
-//	}
+	private static void updateNameDrawHeight() {
+		ForgeGui gui = (ForgeGui) Minecraft.getInstance().gui;
+		int height = Math.max(gui.leftHeight, gui.rightHeight);
+		nameDrawHeight = Math.min(0.0, -(height - 59.0));
+	}
 
-//	private static void updateNameDrawHeight() {
-//		ForgeGui gui = (ForgeGui) Minecraft.getInstance().gui;
-//		int height = Math.max(gui.leftHeight, gui.rightHeight);
-//		nameDrawHeight = Math.min(0.0, -(height - 59.0));
-//	}
-//
-//	@SubscribeEvent(
-//					priority = EventPriority.LOWEST
-//	)
-//	public static void preRenderGuiOverlay(RenderGuiOverlayEvent.Pre event) {
-//		if (event.getOverlay() == VanillaGuiOverlay.ITEM_NAME.type()) {
-//			updateNameDrawHeight();
-//			event.getPoseStack().translate(0.0, nameDrawHeight, 0.0);
-//		}
-//	}
-//
-//	@SubscribeEvent(
-//					priority = EventPriority.LOWEST
-//	)
-//	public static void postRenderGuiOverlay(RenderGuiOverlayEvent.Post event) {
-//
-//		if (event.getOverlay() == VanillaGuiOverlay.ITEM_NAME.type()) {
-//			event.getPoseStack().translate(0.0, -nameDrawHeight, 0.0);
-//		}
-//	}
-
-/*
-	@SubscribeEvent
-	public static void applyCaveFogColor(ViewportEvent.ComputeFogColor event) {
-		if (CommonUtils.isInCave(Minecraft.getInstance().player)) {
-			event.setRed(0);
-			event.setGreen(0);
-			event.setBlue(0);
+	@SubscribeEvent(
+					priority = EventPriority.LOWEST
+	)
+	public static void preRenderGuiOverlay(RenderGuiOverlayEvent.Pre event) {
+		if (event.getOverlay() == VanillaGuiOverlay.ITEM_NAME.type()) {
+			updateNameDrawHeight();
+			event.getPoseStack().translate(0.0, nameDrawHeight, 0.0);
 		}
 	}
-*/
 
-//	public static void refreshShader() {
-//		isShaderApplied = false;
-//	}
+	@SubscribeEvent(
+					priority = EventPriority.LOWEST
+	)
+	public static void postRenderGuiOverlay(RenderGuiOverlayEvent.Post event) {
+
+		if (event.getOverlay() == VanillaGuiOverlay.ITEM_NAME.type()) {
+			event.getPoseStack().translate(0.0, -nameDrawHeight, 0.0);
+		}
+	}
 
 	@SubscribeEvent
-	public static void applyCaveFogDistance(ViewportEvent.RenderFog event) {
-		if (NWClient.isUnderground)
+	public static void onKeyPressed(InputEvent.Key event) {
+
+	}
+
+	@SubscribeEvent
+	public static void applyFogMods(ViewportEvent.RenderFog event) {
+		if (CommonUtils.isUnderground(Objects.requireNonNull(Minecraft.getInstance().player)))
 			NWClient.undergroundTransitionValue = Math.min(1.0F, NWClient.undergroundTransitionValue + Minecraft.getInstance().getDeltaFrameTime() / 100F);
 		else
 			NWClient.undergroundTransitionValue = Math.max(0.0F, NWClient.undergroundTransitionValue - Minecraft.getInstance().getDeltaFrameTime() / 30F);
@@ -98,14 +79,41 @@ public class ClientEvents {
 			float[] fogOgColors = RenderSystem.getShaderFogColor();
 
 			float transitionValue = NWClient.undergroundTransitionValue;
-			RenderSystem.setShaderFogStart(Mth.lerp(transitionValue, RenderSystem.getShaderFogStart(), fogStart));
-			RenderSystem.setShaderFogEnd(Mth.lerp(transitionValue, RenderSystem.getShaderFogEnd(), fogEnd));
+			applyFogDistance(Mth.lerp(transitionValue, NWConfig.Client.REGULAR_FOG_START.get().floatValue(), fogStart),
+							Mth.lerp(transitionValue, NWConfig.Client.REGULAR_FOG_END.get().floatValue(), fogEnd));
 			RenderSystem.setShaderFogColor(
 							Mth.lerp(transitionValue, fogOgColors[0], 0.0F),
 							Mth.lerp(transitionValue, fogOgColors[1], 0.0F),
 							Mth.lerp(transitionValue, fogOgColors[2], 0.0F)
 			);
 		}
+		else
+			applyRegularFog();
+	}
+
+	private static void applyFogDistance(float fogStart, float fogEnd) {
+		float currentFogEnd = RenderSystem.getShaderFogEnd();
+		float currentFogStart = RenderSystem.getShaderFogStart();
+
+		float currentIntensity = -currentFogStart / (currentFogEnd - currentFogStart);
+		float nextIntensity = -fogStart / (fogEnd - fogStart);
+
+		if (fogEnd < currentFogEnd) {
+			RenderSystem.setShaderFogEnd(fogEnd);
+			if (currentIntensity > nextIntensity)
+				fogStart = fogEnd * -currentIntensity;
+		} else if (currentIntensity < nextIntensity)
+			fogStart = currentFogEnd * -nextIntensity;
+		else if (currentIntensity > nextIntensity)
+			fogStart = currentFogEnd * -currentIntensity;
+
+		if (fogStart < currentFogStart)
+			RenderSystem.setShaderFogStart(fogStart);
+	}
+
+	private static void applyRegularFog() {
+		applyFogDistance(NWConfig.Client.REGULAR_FOG_START.get().floatValue(),
+						NWConfig.Client.REGULAR_FOG_END.get().floatValue());
 	}
 
 	@Mod.EventBusSubscriber(modid = NWTweaks.MODID, value = Dist.CLIENT, bus = Bus.MOD)
@@ -131,7 +139,7 @@ public class ClientEvents {
 					}
 					return (float) (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / maxCharge;
 				});
-				ItemProperties.register(ModRegistry.AIR_BLADDER_ITEM.get(), new ResourceLocation(NWTweaks.MODID,"oxygen_amount"), (stack, level, entity, seed) -> {
+				ItemProperties.register(ModRegistry.AIR_BLADDER_ITEM.get(), new ResourceLocation(NWTweaks.MODID, "oxygen_amount"), (stack, level, entity, seed) -> {
 					CompoundTag nbt = stack.getOrCreateTag();
 					int oxygenAmount;
 					if (nbt.contains(CommonUtils.AIR_BLADDER_TAG_OXYGEN_AMOUNT))
@@ -140,6 +148,16 @@ public class ClientEvents {
 						oxygenAmount = NWConfig.Common.BLADDER_CAPACITY.get();
 
 					return (float) oxygenAmount / (float) NWConfig.Common.BLADDER_CAPACITY.get();
+				});
+				ItemProperties.register(com.newwind.nwtweaks.registries.Items.PILL_ITEM.get(), new ResourceLocation(NWTweaks.MODID, "pill_type"), (stack, level, entity, seed) -> {
+					CompoundTag nbt = stack.getOrCreateTag();
+					int pillType;
+					if (nbt.contains(PillItem.SLOT_TAG))
+						pillType = nbt.getInt(PillItem.SLOT_TAG) - 1;
+					else
+						pillType = -1;
+
+					return pillType;
 				});
 			});
 		}
@@ -153,11 +171,6 @@ public class ClientEvents {
 		public static void registerGuiOverlays(RegisterGuiOverlaysEvent event) {
 			EventHandler.register(new SanityClassicBar());
 		}
-
-//		@SubscribeEvent
-//		public static void onModRegistartion(FMLConstructModEvent event) {
-//
-//		}
 
 	}
 

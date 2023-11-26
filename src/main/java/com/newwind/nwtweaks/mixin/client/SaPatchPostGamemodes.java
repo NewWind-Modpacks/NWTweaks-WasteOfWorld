@@ -13,12 +13,16 @@ import java.util.Iterator;
 import java.util.List;
 
 @Mixin(PostProcessor.class)
-public class SPatchPostGamemodes implements IPostProcessRenderizable {
+public class SaPatchPostGamemodes implements IPostProcessRenderizable {
 
 	@Final
-	@Shadow
+	@Shadow(
+					remap = false
+	)
 	public final List<PostProcessor.PostPassEntry> passEntries = new ArrayList<>();
-	@Shadow
+	@Shadow(
+					remap = false
+	)
 	private float m_time;
 
 	@Unique

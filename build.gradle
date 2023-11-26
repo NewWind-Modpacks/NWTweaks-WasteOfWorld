@@ -35,7 +35,7 @@ minecraft {
     // Simply re-run your setup task after changing the mappings to update your workspace.
     mappings channel: 'official', version: '1.19.2'
 
-    // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg') // Currently, this location cannot be changed from the default.
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg') // Currently, this location cannot be changed from the default.
 
     // Default run configurations.
     // These can be tweaked, removed, or duplicated as needed.
@@ -148,11 +148,13 @@ dependencies {
     implementation fg.deobf("com.illusivesoulworks.radiantgear:radiantgear-forge-1.19.2:2.0.2")
 
     implementation fg.deobf("curse.maven:backpacked-352835:4725664")
+    implementation fg.deobf("curse.maven:better-cave-dweller-922411:4795242")
     implementation fg.deobf("curse.maven:better-combat-by-daedelus-639842:4534619")
     implementation fg.deobf("curse.maven:classic-bars-317642:4430475")
     implementation fg.deobf("curse.maven:cloth-config-348521:3972423")
     implementation fg.deobf("curse.maven:compact-machines-224218:3907274")
     implementation fg.deobf("curse.maven:curios-309927:4523009")
+    implementation fg.deobf("curse.maven:corpse-316582:3920717")
     implementation fg.deobf("curse.maven:engulfing-darkness-514138:4073396")
     implementation fg.deobf("curse.maven:eyes-in-the-darkness-304719:3872340")
     implementation fg.deobf("curse.maven:feathers-699933:4573576")

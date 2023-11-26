@@ -35,6 +35,7 @@
     "client.BackpackedClientEvents",
     "client.BCTargetFinder",
     "client.CBBarOverlayImpl",
+    "client.CBEventHandler",
     "client.CBStaminaB",
     "client.CDCaveDwellerEyesLayer",
     "client.FeathersClassicBar",

@@ -19,7 +19,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
-import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -35,9 +34,8 @@ public class ClientEvents {
 
 	private static double nameDrawHeight = 0.0D;
 
-	private static void updateNameDrawHeight() {
-		ForgeGui gui = (ForgeGui) Minecraft.getInstance().gui;
-		int height = Math.max(gui.leftHeight, gui.rightHeight);
+	public static void updateNameDrawHeight(int left, int right) {
+		int height = Math.max(left, right);
 		nameDrawHeight = Math.min(0.0, -(height - 59.0));
 	}
 
@@ -46,7 +44,6 @@ public class ClientEvents {
 	)
 	public static void preRenderGuiOverlay(RenderGuiOverlayEvent.Pre event) {
 		if (event.getOverlay() == VanillaGuiOverlay.ITEM_NAME.type()) {
-			updateNameDrawHeight();
 			event.getPoseStack().translate(0.0, nameDrawHeight, 0.0);
 		}
 	}
@@ -74,7 +71,7 @@ public class ClientEvents {
 			NWClient.undergroundTransitionValue = Math.max(0.0F, NWClient.undergroundTransitionValue - Minecraft.getInstance().getDeltaFrameTime() / 30F);
 
 		if (NWClient.undergroundTransitionValue > 0.0F) {
-			float fogStart = event.getMode() == FogRenderer.FogMode.FOG_SKY ? 0.0F : (float) NWConfig.Client.UNDERGROUND_FOG_START.get().floatValue();
+			float fogStart = event.getMode() == FogRenderer.FogMode.FOG_SKY ? 0.0F : NWConfig.Client.UNDERGROUND_FOG_START.get().floatValue();
 			float fogEnd = NWConfig.Client.UNDERGROUND_FOG_END.get().floatValue();
 			float[] fogOgColors = RenderSystem.getShaderFogColor();
 

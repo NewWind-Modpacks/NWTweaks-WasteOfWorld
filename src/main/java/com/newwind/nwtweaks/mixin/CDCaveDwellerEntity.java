@@ -20,6 +20,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -34,7 +35,7 @@ public abstract class CDCaveDwellerEntity extends Monster implements ICaveDwelle
 	}
 
 	@Override
-	public boolean doHurtTarget(Entity p_21372_) {
+	public boolean doHurtTarget(@NotNull Entity p_21372_) {
 		float f = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE);
 		float f1 = (float) this.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
 		if (p_21372_ instanceof LivingEntity) {
@@ -56,7 +57,7 @@ public abstract class CDCaveDwellerEntity extends Monster implements ICaveDwelle
 		boolean flag = p_21372_.hurt(damageSource, f);
 		if (flag) {
 			if (f1 > 0.0F && p_21372_ instanceof LivingEntity) {
-				((LivingEntity) p_21372_).knockback((double) (f1 * 0.5F), (double) Mth.sin(this.getYRot() * ((float) Math.PI / 180F)), (double) (-Mth.cos(this.getYRot() * ((float) Math.PI / 180F))));
+				((LivingEntity) p_21372_).knockback(f1 * 0.5F, Mth.sin(this.getYRot() * ((float) Math.PI / 180F)), -Mth.cos(this.getYRot() * ((float) Math.PI / 180F)));
 				this.setDeltaMovement(this.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
 			}
 
@@ -102,4 +103,27 @@ public abstract class CDCaveDwellerEntity extends Monster implements ICaveDwelle
 	public Player nWTweaks$attackedByPlayer() {
 		return nWTweaks$hasBeenHitByPlayer;
 	}
+
+	@Inject(
+					method = "startRiding",
+					at = @At("HEAD"),
+					cancellable = true,
+					remap = false
+	)
+	public void startRidingFilter(Entity vehicle, boolean force, CallbackInfoReturnable<Boolean> cir) {
+		if (vehicle instanceof LivingEntity)
+			cir.setReturnValue(super.startRiding(vehicle, force));
+	}
+
+	@Inject(
+					method = "canRide",
+					at = @At("HEAD"),
+					cancellable = true,
+					remap = false
+	)
+	public void canRideFilter(Entity vehicle, CallbackInfoReturnable<Boolean> cir) {
+		if (vehicle instanceof LivingEntity)
+			cir.setReturnValue(super.canRide(vehicle));
+	}
+
 }

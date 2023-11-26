@@ -19,7 +19,7 @@ public class CDCaveDwellerTTCGoal extends NearestAttackableTargetGoal<Player> {
 
 	@Mutable
 	@Final
-	@Shadow
+	@Shadow(remap = false)
 	private final CaveDwellerEntity caveDweller;
 
 	// Dummy

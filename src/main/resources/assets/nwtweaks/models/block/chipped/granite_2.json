@@ -1,0 +1,7 @@
+{
+  "parent": "nwtweaks:block/overlayed_template",
+  "textures": {
+    "base": "minecraft:block/granite",
+    "overlay": "nwtweaks:block/chipped_2"
+  }
+}

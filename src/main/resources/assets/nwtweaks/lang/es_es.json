@@ -2,6 +2,14 @@
   "attribute.name.nwtweaks.bc-attack_range": "Multiplicador de rango de ataque",
   "attribute.name.nwtweaks.headshot_damage": "Daño de disparo a la cabeza adicional",
   "attribute.name.nwtweaks.ranged_armor_piercing": "Ranged Armor Piercing",
+  "block.nwtweaks.chipped_deepslate": "Deepslate picada",
+  "block.nwtweaks.chipped_stone": "Piedra picada",
+  "block.nwtweaks.chipped_granite": "Granito picado",
+  "block.nwtweaks.chipped_diorite": "Diorita picada",
+  "block.nwtweaks.chipped_andesite": "Andesita picada",
+  "block.nwtweaks.chipped_tuff": "Toba picada",
+  "block.nwtweaks.chipped_dripstone_block": "Bloque de epeleotema picado",
+  "block.nwtweaks.chipped_blackstone": "Piedra negra picada",
   "death.attack.radiation": "El ADN de %1$s fue deconstruido",
   "death.attack.radiation.player": "El ADN de %1$s fue deconstruido intentando escapar de %2$s",
   "death.attack.toxic_gas": "%1$s respiró gas tóxico",
@@ -30,9 +38,5 @@
   "item.nwtweaks.pill.description.poison_10_minutes": "Veneno (10:00)",
   "item.nwtweaks.plant_fiber": "Fibras de planta",
   "item.nwtweaks.plant_string": "Hilo de planta",
-  "block.nwtweaks.chipped_stone": "Piedra picada",
-  "block.nwtweaks.chipped_deepslate": "Deepslate picada",
-  "message.nwtweaks.machine_timeout": "No es posible usar máquinas compactas de noche",
-  "item.nwtweaks.pill.description.sanity_plus_20": "Sanity +15",
-  "item.nwtweaks.pill.sanity_plus_20": "Antipsychotics"
+  "message.nwtweaks.machine_timeout": "No es posible usar máquinas compactas de noche o en cuevas"
 }

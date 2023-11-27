@@ -8,6 +8,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 // TODO: implement extra weapon parts
+@SuppressWarnings("unused")
 public class Items {
 
 	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, NWTweaks.MODID);
@@ -43,6 +44,42 @@ public class Items {
 	);
 	public static final RegistryObject<Item> CHIPPED_DEEPSLATE = ITEMS.register(
 					"chipped_deepslate", () -> new BlockItem(Blocks.CHIPPED_DEEPSLATE.get(),
+									new Item.Properties()
+													.tab(CreativeModeTab.TAB_BUILDING_BLOCKS)
+					)
+	);
+	public static final RegistryObject<Item> CHIPPED_GRANITE = ITEMS.register(
+					"chipped_granite", () -> new BlockItem(Blocks.CHIPPED_GRANITE.get(),
+									new Item.Properties()
+													.tab(CreativeModeTab.TAB_BUILDING_BLOCKS)
+					)
+	);
+	public static final RegistryObject<Item> CHIPPED_ANDESITE = ITEMS.register(
+					"chipped_andesite", () -> new BlockItem(Blocks.CHIPPED_ANDESITE.get(),
+									new Item.Properties()
+													.tab(CreativeModeTab.TAB_BUILDING_BLOCKS)
+					)
+	);
+	public static final RegistryObject<Item> CHIPPED_DIORITE = ITEMS.register(
+					"chipped_diorite", () -> new BlockItem(Blocks.CHIPPED_DIORITE.get(),
+									new Item.Properties()
+													.tab(CreativeModeTab.TAB_BUILDING_BLOCKS)
+					)
+	);
+	public static final RegistryObject<Item> CHIPPED_TUFF = ITEMS.register(
+					"chipped_tuff", () -> new BlockItem(Blocks.CHIPPED_TUFF.get(),
+									new Item.Properties()
+													.tab(CreativeModeTab.TAB_BUILDING_BLOCKS)
+					)
+	);
+	public static final RegistryObject<Item> CHIPPED_DRIPSTONE = ITEMS.register(
+					"chipped_dripstone_block", () -> new BlockItem(Blocks.CHIPPED_DRIPSTONE.get(),
+									new Item.Properties()
+													.tab(CreativeModeTab.TAB_BUILDING_BLOCKS)
+					)
+	);
+	public static final RegistryObject<Item> CHIPPED_BLACKSTONE = ITEMS.register(
+					"chipped_blackstone", () -> new BlockItem(Blocks.CHIPPED_BLACKSTONE.get(),
 									new Item.Properties()
 													.tab(CreativeModeTab.TAB_BUILDING_BLOCKS)
 					)

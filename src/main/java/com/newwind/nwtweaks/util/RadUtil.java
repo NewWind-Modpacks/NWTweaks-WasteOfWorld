@@ -27,8 +27,10 @@ public class RadUtil {
 			}
 			maxHealth.removeModifier(attributeId);
 			maxHealth.addPermanentModifier(genAttribute(Math.min(radAttribute.getAmount() - rads, 0.0)));
-			if (rads > 0 && Math.ceil(player.getHealth()) > Math.ceil(maxHealth.getValue()))
-				player.hurt(RADIATION_DAMAGE, (float) Math.max(player.getHealth() - maxHealth.getValue(), 1.0));
+//			if (rads > 0 && Math.ceil(player.getHealth()) > Math.ceil(maxHealth.getValue()))
+//				player.hurt(RADIATION_DAMAGE, (float) Math.max(player.getHealth() - maxHealth.getValue(), 1.0));
+//			AbstractPlayerDamageModel damageModel = ichttt.mods.firstaid.common.util.CommonUtils.getDamageModel(player);
+//			damageModel.getCurrentMaxHealth()
 		}
 	}
 

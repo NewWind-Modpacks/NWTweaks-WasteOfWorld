@@ -5,7 +5,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TieredItem;
-import net.minecraft.world.item.Tiers;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.Tags;
@@ -14,7 +13,6 @@ import se.mickelus.tetra.items.modular.ItemModularHandheld;
 import se.mickelus.tetra.util.TierHelper;
 import se.mickelus.tetra.util.ToolActionHelper;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
@@ -24,16 +22,16 @@ import static java.util.Map.entry;
 //This class was written while reading code from Force Correct Tool (https://www.curseforge.com/minecraft/mc-mods/force-correct-tool/)
 public class BreakChecks {
 
-	private static final Map<TagKey<Block>, Integer> tierMap = Collections.unmodifiableMap(Map.ofEntries(
+	private static final Map<TagKey<Block>, Integer> tierMap = Map.ofEntries(
 					entry(Tags.Blocks.NEEDS_WOOD_TOOL, 0),
 					entry(Tags.Blocks.NEEDS_GOLD_TOOL, 1),
 					entry(BlockTags.NEEDS_STONE_TOOL, 2),
 					entry(BlockTags.NEEDS_IRON_TOOL, 3),
 					entry(BlockTags.NEEDS_DIAMOND_TOOL, 4),
 					entry(Tags.Blocks.NEEDS_NETHERITE_TOOL, 5)
-	));
+	);
 
-	public static boolean check(Player player, BlockState state) {;
+	public static boolean check(Player player, BlockState state) {
 		if (player.isCreative())
 			return true;
 
@@ -42,7 +40,7 @@ public class BreakChecks {
 		if (stack.getItem() instanceof ItemModularHandheld)
 			return checkTetraItem(stack, state);
 		else
-			return  stack.isCorrectToolForDrops(state) || checkTags(stack, state);
+			return stack.isCorrectToolForDrops(state) || checkTags(stack, state);
 	}
 
 	private static boolean checkTags(ItemStack stack, BlockState state) {
@@ -121,11 +119,9 @@ public class BreakChecks {
 
 	// Code from Tetra
 	private static boolean checkTetraItem(ItemStack stack, BlockState state) {
-		return ToolActionHelper.getAppropriateTools(state).stream().map((requiredTool) -> {
-			return ((ItemModularHandheld) stack.getItem()).getHarvestTier(stack, requiredTool);
-		}).map(TierHelper::getTier).filter(Objects::nonNull).anyMatch((tier) -> {
-			return TierSortingRegistry.isCorrectTierForDrops(tier, state);
-		});
+		return ToolActionHelper.getAppropriateTools(state).stream().map((requiredTool) ->
+						((ItemModularHandheld) stack.getItem()).getHarvestTier(stack, requiredTool)).map(TierHelper::getTier).filter(Objects::nonNull).anyMatch((tier) ->
+						TierSortingRegistry.isCorrectTierForDrops(tier, state));
 	}
 
 }

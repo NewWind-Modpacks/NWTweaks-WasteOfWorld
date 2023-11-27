@@ -3,18 +3,23 @@ package com.newwind.nwtweaks.util;
 import com.mrcrayfish.backpacked.Backpacked;
 import com.newwind.nwtweaks.NWConfig;
 import com.newwind.nwtweaks.capability.IsUndergroundProvider;
-import com.newwind.nwtweaks.client.NWClient;
 import com.newwind.nwtweaks.registries.Enchantments;
 import com.stereowalker.survive.Survive;
 import com.stereowalker.survive.core.SurviveEntityStats;
 import com.stereowalker.survive.world.entity.ai.attributes.SAttributes;
+import ichttt.mods.firstaid.FirstAid;
+import ichttt.mods.firstaid.api.damagesystem.AbstractDamageablePart;
+import ichttt.mods.firstaid.api.damagesystem.AbstractPlayerDamageModel;
+import ichttt.mods.firstaid.common.damagesystem.distribution.DamageDistribution;
+import ichttt.mods.firstaid.common.damagesystem.distribution.RandomDamageDistribution;
+import ichttt.mods.firstaid.common.network.MessageSyncDamageModel;
 import mcjty.lostcities.api.ILostChunkInfo;
 import mcjty.lostcities.api.ILostCities;
 import mcjty.lostcities.api.ILostCityInformation;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -25,6 +30,7 @@ import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.network.PacketDistributor;
 import nuparu.tinyinv.config.ServerConfig;
 import nuparu.tinyinv.utils.Utils;
 
@@ -37,6 +43,7 @@ public class CommonUtils {
 	private static boolean registered = false;
 	private static ILostCities lostCities;
 
+	// TODO: register
 	public static void registerLostCities() {
 		if (ModList.get().isLoaded("lostcities")) {
 			registerLostCitiesInternal();
@@ -53,6 +60,8 @@ public class CommonUtils {
 
 	public static boolean areCMUnavailable(MinecraftServer server, ServerPlayer player) {
 		if (!player.isCreative() && !player.isSpectator()) {
+			if (isUnderground(player))
+				return true;
 			final int start = NWConfig.Common.CM_TIMEOUT_START.get();
 			final int end = NWConfig.Common.CM_TIMEOUT_END.get();
 			long time = server.overworld().getDayTime() % 24000;
@@ -108,11 +117,22 @@ public class CommonUtils {
 		return effTemp;
 	}
 
+	// TODO: improve damage system
+	public static void damagePlayerModel(AbstractPlayerDamageModel damageModel, int damage, Player player, DamageSource source, AbstractDamageablePart part) {
+		if (part != null)
+			part.damage(damage, player, true);
+		else
+			//noinspection ConstantValue
+			DamageDistribution.handleDamageTaken(RandomDamageDistribution.getDefault(), damageModel, damage, player, source, damage < 3.4028235E37F, true);
+
+		if (player instanceof ServerPlayer serverPlayer)
+			FirstAid.NETWORKING.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new MessageSyncDamageModel(damageModel, false));
+	}
+
 	public static boolean isUnderground(LivingEntity living) {
 		AtomicBoolean isUnderground = new AtomicBoolean(false);
-		living.getCapability(IsUndergroundProvider.CAPABILITY).ifPresent(undergroundObject -> {
-			isUnderground.set(undergroundObject.isUnderground());
-		});
+		living.getCapability(IsUndergroundProvider.CAPABILITY).ifPresent(undergroundObject ->
+						isUnderground.set(undergroundObject.isUnderground()));
 		return isUnderground.get();
 	}
 
@@ -129,6 +149,10 @@ public class CommonUtils {
 	}
 
 	public static boolean isUnderground(Level level, BlockPos blockPos) {
+
+		if (level.dimension() != Level.OVERWORLD)
+			return false;
+
 		int y = blockPos.getY();
 		if (isInLostCityBuilding(level, blockPos))
 			return false;

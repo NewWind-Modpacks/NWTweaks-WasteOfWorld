@@ -1,7 +1,9 @@
 package com.newwind.nwtweaks.event;
 
 import com.mrcrayfish.backpacked.item.BackpackItem;
+import com.mrcrayfish.guns.event.GunProjectileHitEvent;
 import com.mrcrayfish.guns.item.GunItem;
+import com.mrcrayfish.guns.util.math.ExtendedEntityRayTraceResult;
 import com.newwind.nwtweaks.NWConfig;
 import com.newwind.nwtweaks.NWTweaks;
 import com.newwind.nwtweaks.capability.*;
@@ -15,16 +17,20 @@ import com.newwind.nwtweaks.util.BreakChecks;
 import com.newwind.nwtweaks.util.CommonUtils;
 import com.newwind.nwtweaks.util.RadUtil;
 import com.newwind.nwtweaks.world.blocks.ChippedBlock;
-import com.newwind.nwtweaks.world.blocks.ChippedPillarBlock;
 import com.newwind.nwtweaks.world.items.PillItem;
+import croissantnova.sanitydim.entity.InnerEntity;
 import de.cadentem.cave_dweller.entities.CaveDwellerEntity;
 import dev.compactmods.machines.dimension.Dimension;
 import dev.compactmods.machines.util.PlayerUtil;
+import ichttt.mods.firstaid.api.damagesystem.AbstractDamageablePart;
+import ichttt.mods.firstaid.api.damagesystem.AbstractPlayerDamageModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.IndirectEntityDamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -40,12 +46,14 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.event.enchanting.EnchantmentLevelSetEvent;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.ShieldBlockEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -61,8 +69,8 @@ import se.mickelus.tetra.items.modular.impl.crossbow.ModularCrossbowItem;
 import top.theillusivec4.curios.api.event.CurioEquipEvent;
 import top.theillusivec4.curios.api.event.CurioUnequipEvent;
 
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
-
 
 @Mod.EventBusSubscriber(modid = NWTweaks.MODID)
 public class CommonEvents {
@@ -104,34 +112,18 @@ public class CommonEvents {
 		}
 	}
 
-//	@SubscribeEvent
-//	public static void onLivingHurt(LivingHurtEvent event) {
-//		if (event.getEntity() instanceof CaveDwellerEntity caveDweller) {
-//			caveDweller.getCapability(RedDwellerProvider.CAPABILITY).ifPresent(redDweller -> {
-//				redDweller.setRedDweller(true);
-//				ModMessages.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> caveDweller), new S2CRedDweller(caveDweller.getId(), redDweller.isRedDweller()));
-//			});
-//		}
-//
-//	}
-
-//	@SubscribeEvent
-//	public static void onEntitySpawn(LivingSpawnEvent event) {
-//		if (!event.getLevel().isClientSide())
-//			if (event.getEntity() instanceof CaveDwellerEntity dweller) {
-//				dweller.getCapability(RedDwellerProvider.CAPABILITY).ifPresent(redDweller -> {
-//					redDweller.setRedDweller(false);
-//					ModMessages.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> dweller), new S2CRedDweller(dweller.getId(), redDweller.isRedDweller()));
-//				});
-//			}
-//	}
+	@SubscribeEvent
+	public static void onLivingHurt(LivingHurtEvent event) {
+		if (event.getEntity() instanceof InnerEntity
+						&& event.getSource() instanceof IndirectEntityDamageSource)
+			event.setCanceled(true);
+	}
 
 	@SubscribeEvent
 	public static void onPlayerTrack(PlayerEvent.StartTracking event) {
 		if (event.getTarget() instanceof CaveDwellerEntity dweller) {
-			dweller.getCapability(RedDwellerProvider.CAPABILITY).ifPresent(redDweller -> {
-				ModMessages.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> dweller), new S2CRedDweller(dweller.getId(), redDweller.isRedDweller()));
-			});
+			dweller.getCapability(RedDwellerProvider.CAPABILITY).ifPresent(redDweller ->
+							ModMessages.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> dweller), new S2CRedDweller(dweller.getId(), redDweller.isRedDweller())));
 		}
 	}
 
@@ -202,7 +194,7 @@ public class CommonEvents {
 	private static boolean isBackpackUnused(Player player) {
 		AbstractContainerMenu container = player.containerMenu;
 		for (int i = 0; i < container.slots.size(); ++i) {
-			Slot slot = (Slot) container.slots.get(i);
+			Slot slot = container.slots.get(i);
 			if (CommonUtils.tinyInvShouldBeRemoved(slot, player, container, false)
 							&& !slot.getItem().isEmpty())
 				return false;
@@ -223,43 +215,94 @@ public class CommonEvents {
 
 	@SubscribeEvent
 	public static void onBlockBreak(final BlockEvent.BreakEvent event) {
+
 		BlockState state = event.getState();
 		Block block = state.getBlock();
 		Player player = event.getPlayer();
 		LevelAccessor level = event.getLevel();
 		BlockPos pos = event.getPos();
 		BlockState setBlock = null;
+
 		if (!player.isCreative())
+
 			if (block == net.minecraft.world.level.block.Blocks.STONE) {
 				setBlock = Blocks.CHIPPED_STONE.get().defaultBlockState();
 			} else if (block == net.minecraft.world.level.block.Blocks.DEEPSLATE) {
 				setBlock = Blocks.CHIPPED_DEEPSLATE.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, state.getValue(RotatedPillarBlock.AXIS));
+			} else if (block == net.minecraft.world.level.block.Blocks.GRANITE) {
+				setBlock = Blocks.CHIPPED_GRANITE.get().defaultBlockState();
+			} else if (block == net.minecraft.world.level.block.Blocks.DIORITE) {
+				setBlock = Blocks.CHIPPED_DIORITE.get().defaultBlockState();
+			} else if (block == net.minecraft.world.level.block.Blocks.ANDESITE) {
+				setBlock = Blocks.CHIPPED_ANDESITE.get().defaultBlockState();
+			} else if (block == net.minecraft.world.level.block.Blocks.TUFF) {
+				setBlock = Blocks.CHIPPED_TUFF.get().defaultBlockState();
+			} else if (block == net.minecraft.world.level.block.Blocks.DRIPSTONE_BLOCK) {
+				setBlock = Blocks.CHIPPED_DRIPSTONE.get().defaultBlockState();
+			} else if (block == net.minecraft.world.level.block.Blocks.BLACKSTONE) {
+				setBlock = Blocks.CHIPPED_BLACKSTONE.get().defaultBlockState();
 			} else if (block instanceof ChippedBlock && state.getValue(ChippedBlock.STAGE) < ChippedBlock.MAX_STAGE) {
 				setBlock = state.setValue(ChippedBlock.STAGE, state.getValue(ChippedBlock.STAGE) + 1);
 				level.levelEvent(player, 2001, pos, Block.getId(state));
 			}
+
+			// Handle fire extinguish damage
+			else if (block == net.minecraft.world.level.block.Blocks.FIRE) {
+				AbstractPlayerDamageModel damageModel = ichttt.mods.firstaid.common.util.CommonUtils.getDamageModel(player);
+				AbstractDamageablePart part = null;
+				AbstractDamageablePart leftArm = damageModel.LEFT_ARM;
+				AbstractDamageablePart rightArm = damageModel.RIGHT_ARM;
+				if (leftArm.currentHealth > 0f)
+					if (rightArm.currentHealth > 0f)
+						if (level.getRandom().nextBoolean())
+							part = leftArm;
+						else
+							part = rightArm;
+					else
+						part = leftArm;
+				else if (rightArm.currentHealth > 0f)
+					part = rightArm;
+				CommonUtils.damagePlayerModel(damageModel, 1, player, DamageSource.IN_FIRE, part);
+
+			}
+
 		if (setBlock != null) {
 			event.setCanceled(true);
 			level.setBlock(pos, setBlock, level.isClientSide() ? 11 : 3);
 			Block.dropResources(state, level, pos, null);
 		}
+
 	}
 
 	@SubscribeEvent
 	public static void onBreakSpeed(final PlayerEvent.BreakSpeed event) {
-		if (NWConfig.Common.ENABLE_BLOCK_BREAK_CHECK.get() && !BreakChecks.check(event.getEntity(), event.getState()))
-			event.setCanceled(true);
-
 		float speed = event.getNewSpeed();
 		BlockState state = event.getState();
+		Optional<BlockPos> posOptional = event.getPosition();
+		BlockPos pos = null;
+		if (posOptional.isPresent())
+			pos = posOptional.get();
+
+		if (NWConfig.Common.ENABLE_BLOCK_BREAK_CHECK.get() &&
+						!(pos != null && state.getDestroySpeed(event.getEntity().getLevel(), pos) <= 0f)
+						&& !BreakChecks.check(event.getEntity(), state))
+			event.setCanceled(true);
+
 		Block block = state.getBlock();
 		if (block instanceof ChippedBlock) {
 			int stage = state.getValue(ChippedBlock.STAGE);
 			speed = ((float) (speed / (Math.pow(2, stage))));
 		}
-		if (block instanceof ChippedBlock || block == net.minecraft.world.level.block.Blocks.STONE || block == net.minecraft.world.level.block.Blocks.DEEPSLATE) {
+		if (block instanceof ChippedBlock
+						|| block == net.minecraft.world.level.block.Blocks.STONE
+						|| block == net.minecraft.world.level.block.Blocks.DEEPSLATE
+						|| block == net.minecraft.world.level.block.Blocks.GRANITE
+						|| block == net.minecraft.world.level.block.Blocks.DIORITE
+						|| block == net.minecraft.world.level.block.Blocks.ANDESITE
+						|| block == net.minecraft.world.level.block.Blocks.TUFF
+						|| block == net.minecraft.world.level.block.Blocks.DRIPSTONE_BLOCK
+						|| block == net.minecraft.world.level.block.Blocks.BLACKSTONE)
 			speed /= NWConfig.Common.STONE_MINE_SPEED_MULTIPLIER.get();
-		}
 
 		event.setNewSpeed(speed);
 	}
@@ -282,7 +325,7 @@ public class CommonEvents {
 					event.addCapability(new ResourceLocation(NWTweaks.MODID, "server_player_data"), new ServerPlayerDataProvider());
 				}
 			} else if (livingEntity instanceof CaveDwellerEntity caveDweller) {
-				if (!livingEntity.getCapability(RedDwellerProvider.CAPABILITY).isPresent()) {
+				if (!caveDweller.getCapability(RedDwellerProvider.CAPABILITY).isPresent()) {
 					event.addCapability(new ResourceLocation(NWTweaks.MODID, "red_dweller"), new RedDwellerProvider());
 				}
 			}
@@ -326,6 +369,14 @@ public class CommonEvents {
 					level.broadcastEntityEvent(player, (byte) 30);
 			}
 		}
+	}
+
+	@SubscribeEvent
+	public static void onBulletHit(GunProjectileHitEvent event) {
+		HitResult result = event.getRayTrace();
+		if (result instanceof ExtendedEntityRayTraceResult entityResult
+						&& entityResult.getEntity() instanceof InnerEntity)
+			event.setCanceled(true);
 	}
 
 //	@SubscribeEvent

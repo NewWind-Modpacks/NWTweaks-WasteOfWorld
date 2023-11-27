@@ -158,6 +158,7 @@ dependencies {
     implementation fg.deobf("curse.maven:engulfing-darkness-514138:4073396")
     implementation fg.deobf("curse.maven:eyes-in-the-darkness-304719:3872340")
     implementation fg.deobf("curse.maven:feathers-699933:4573576")
+    implementation fg.deobf("curse.maven:first-aid-276837:3952683")
     implementation fg.deobf("curse.maven:framework-549225:4718247")
     implementation fg.deobf("curse.maven:geckolib-388172:4407241")
     implementation fg.deobf("curse.maven:hardcore-torches-forge-576846:4676485")
@@ -182,7 +183,6 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:configured-457570:4462837")
     runtimeOnly fg.deobf("curse.maven:curious-lanterns-621377:4538036")
     runtimeOnly fg.deobf("curse.maven:connectedness-853916:4506203")
-    runtimeOnly fg.deobf("curse.maven:first-aid-276837:3952683")
     runtimeOnly fg.deobf("curse.maven:lucent-493280:4085139")
     runtimeOnly fg.deobf("curse.maven:puzzles-lib-495476:4600775")
     runtimeOnly fg.deobf("curse.maven:reforgium-853424:4505759")
@@ -220,7 +220,9 @@ jar.finalizedBy('reobfJar')
 
 publishing {
     publications {
+        //noinspection GroovyAssignabilityCheck
         mavenJava(MavenPublication) {
+            //noinspection GroovyAssignabilityCheck
             artifact jar
         }
     }

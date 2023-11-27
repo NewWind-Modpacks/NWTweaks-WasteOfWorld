@@ -2,6 +2,14 @@
   "attribute.name.nwtweaks.bc-attack_range": "Attack Range Multiplier",
   "attribute.name.nwtweaks.headshot_damage": "Additional Headshot Damage",
   "attribute.name.nwtweaks.ranged_armor_piercing": "Ranged Armor Piercing",
+  "block.nwtweaks.chipped_deepslate": "Chipped Deepslate",
+  "block.nwtweaks.chipped_stone": "Chipped Stone",
+  "block.nwtweaks.chipped_granite": "Chipped Granite",
+  "block.nwtweaks.chipped_diorite": "Chipped Diorite",
+  "block.nwtweaks.chipped_andesite": "Chipped Andesite",
+  "block.nwtweaks.chipped_tuff": "Chipped Tuff",
+  "block.nwtweaks.chipped_dripstone_block": "Chipped Dripstone Block",
+  "block.nwtweaks.chipped_blackstone": "Chipped Blackstone",
   "death.attack.radiation": "%1$s's DNA was scrambled",
   "death.attack.radiation.player": "%1$s's DNA was scrambled whilst trying to escape %2$s",
   "death.attack.toxic_gas": "%1$s inhaled toxic gas",
@@ -30,7 +38,5 @@
   "item.nwtweaks.pill.description.poison_10_minutes": "Poison (10:00)",
   "item.nwtweaks.plant_fiber": "Plant Fibers",
   "item.nwtweaks.plant_string": "Plant String",
-  "block.nwtweaks.chipped_stone": "Chipped Stone",
-  "block.nwtweaks.chipped_deepslate": "Chipped Deepslate",
-  "message.nwtweaks.machine_timeout": "Cannot use Compact Machines at night"
+  "message.nwtweaks.machine_timeout": "Cannot use Compact Machines at night or underground"
 }

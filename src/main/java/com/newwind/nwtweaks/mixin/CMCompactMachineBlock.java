@@ -14,7 +14,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -22,7 +24,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(CompactMachineBlock.class)
 public abstract class CMCompactMachineBlock {
 
-	private final Component messageTimeout = Component.translatable("message.nwtweaks.machine_timeout").withStyle(Style.EMPTY.withColor(ChatFormatting.RED));
+	@Unique
+	@Final
+	private final Component MESSAGE_TIMEOUT = Component.translatable("message.nwtweaks.machine_timeout").withStyle(Style.EMPTY.withColor(ChatFormatting.RED));
 
 	/**
 	 * @author Kevadroz
@@ -31,7 +35,7 @@ public abstract class CMCompactMachineBlock {
 	private void canEnter(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit, CallbackInfoReturnable<InteractionResult> cir) {
 		if (level instanceof ServerLevel) {
 			if (CommonUtils.areCMUnavailable(level.getServer(), (ServerPlayer) player)) {
-				player.displayClientMessage(messageTimeout, true);
+				player.displayClientMessage(MESSAGE_TIMEOUT, true);
 				cir.setReturnValue(InteractionResult.SUCCESS);
 				cir.cancel();}
 		}

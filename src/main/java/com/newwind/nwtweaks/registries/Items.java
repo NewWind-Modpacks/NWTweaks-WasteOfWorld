@@ -54,14 +54,14 @@ public class Items {
 													.tab(CreativeModeTab.TAB_BUILDING_BLOCKS)
 					)
 	);
-	public static final RegistryObject<Item> CHIPPED_ANDESITE = ITEMS.register(
-					"chipped_andesite", () -> new BlockItem(Blocks.CHIPPED_ANDESITE.get(),
+	public static final RegistryObject<Item> CHIPPED_DIORITE = ITEMS.register(
+					"chipped_diorite", () -> new BlockItem(Blocks.CHIPPED_DIORITE.get(),
 									new Item.Properties()
 													.tab(CreativeModeTab.TAB_BUILDING_BLOCKS)
 					)
 	);
-	public static final RegistryObject<Item> CHIPPED_DIORITE = ITEMS.register(
-					"chipped_diorite", () -> new BlockItem(Blocks.CHIPPED_DIORITE.get(),
+	public static final RegistryObject<Item> CHIPPED_ANDESITE = ITEMS.register(
+					"chipped_andesite", () -> new BlockItem(Blocks.CHIPPED_ANDESITE.get(),
 									new Item.Properties()
 													.tab(CreativeModeTab.TAB_BUILDING_BLOCKS)
 					)
@@ -80,6 +80,82 @@ public class Items {
 	);
 	public static final RegistryObject<Item> CHIPPED_BLACKSTONE = ITEMS.register(
 					"chipped_blackstone", () -> new BlockItem(Blocks.CHIPPED_BLACKSTONE.get(),
+									new Item.Properties()
+													.tab(CreativeModeTab.TAB_BUILDING_BLOCKS)
+					)
+	);
+	public static final RegistryObject<Item> STONE_ROCK = ITEMS.register(
+					"stone_rock", () -> new Item(new Item.Properties()
+									.tab(CreativeModeTab.TAB_MATERIALS)
+					)
+	);
+	public static final RegistryObject<Item> DEEPSLATE_ROCK = ITEMS.register(
+					"deepslate_rock", () -> new Item(new Item.Properties()
+									.tab(CreativeModeTab.TAB_MATERIALS)
+					)
+	);
+	public static final RegistryObject<Item> GRANITE_ROCK = ITEMS.register(
+					"granite_rock", () -> new Item(new Item.Properties()
+									.tab(CreativeModeTab.TAB_MATERIALS)
+					)
+	);
+	public static final RegistryObject<Item> DIORITE_ROCK = ITEMS.register(
+					"diorite_rock", () -> new Item(new Item.Properties()
+									.tab(CreativeModeTab.TAB_MATERIALS)
+					)
+	);
+	public static final RegistryObject<Item> ANDESITE_ROCK = ITEMS.register(
+					"andesite_rock", () -> new Item(new Item.Properties()
+									.tab(CreativeModeTab.TAB_MATERIALS)
+					)
+	);
+	public static final RegistryObject<Item> TUFF_ROCK = ITEMS.register(
+					"tuff_rock", () -> new Item(new Item.Properties()
+									.tab(CreativeModeTab.TAB_MATERIALS)
+					)
+	);
+	public static final RegistryObject<Item> DRIPSTONE_ROCK = ITEMS.register(
+					"dripstone_rock", () -> new Item(new Item.Properties()
+									.tab(CreativeModeTab.TAB_MATERIALS)
+					)
+	);
+	public static final RegistryObject<Item> BLACKSTONE_ROCK = ITEMS.register(
+					"blackstone_rock", () -> new Item(new Item.Properties()
+									.tab(CreativeModeTab.TAB_MATERIALS)
+					)
+	);
+	public static final RegistryObject<Item> COBBLED_GRANITE = ITEMS.register(
+					"cobbled_granite", () -> new BlockItem(Blocks.COBBLED_GRANITE.get(),
+									new Item.Properties()
+													.tab(CreativeModeTab.TAB_BUILDING_BLOCKS)
+					)
+	);
+	public static final RegistryObject<Item> COBBLED_DIORITE = ITEMS.register(
+					"cobbled_diorite", () -> new BlockItem(Blocks.COBBLED_DIORITE.get(),
+									new Item.Properties()
+													.tab(CreativeModeTab.TAB_BUILDING_BLOCKS)
+					)
+	);
+	public static final RegistryObject<Item> COBBLED_ANDESITE = ITEMS.register(
+					"cobbled_andesite", () -> new BlockItem(Blocks.COBBLED_ANDESITE.get(),
+									new Item.Properties()
+													.tab(CreativeModeTab.TAB_BUILDING_BLOCKS)
+					)
+	);
+	public static final RegistryObject<Item> COBBLED_TUFF = ITEMS.register(
+					"cobbled_tuff", () -> new BlockItem(Blocks.COBBLED_TUFF.get(),
+									new Item.Properties()
+													.tab(CreativeModeTab.TAB_BUILDING_BLOCKS)
+					)
+	);
+	public static final RegistryObject<Item> COBBLED_DRIPSTONE = ITEMS.register(
+					"cobbled_dripstone_block", () -> new BlockItem(Blocks.COBBLED_DRIPSTONE.get(),
+									new Item.Properties()
+													.tab(CreativeModeTab.TAB_BUILDING_BLOCKS)
+					)
+	);
+	public static final RegistryObject<Item> COBBLED_BLACKSTONE = ITEMS.register(
+					"cobbled_blackstone", () -> new BlockItem(Blocks.COBBLED_BLACKSTONE.get(),
 									new Item.Properties()
 													.tab(CreativeModeTab.TAB_BUILDING_BLOCKS)
 					)

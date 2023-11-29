@@ -269,7 +269,8 @@ public class CommonEvents {
 		if (setBlock != null) {
 			event.setCanceled(true);
 			level.setBlock(pos, setBlock, level.isClientSide() ? 11 : 3);
-			Block.dropResources(state, level, pos, null);
+			if (level instanceof ServerLevel serverLevel)
+				Block.dropResources(state, serverLevel, pos, null, player, player.getMainHandItem());
 		}
 
 	}
@@ -303,6 +304,10 @@ public class CommonEvents {
 						|| block == net.minecraft.world.level.block.Blocks.DRIPSTONE_BLOCK
 						|| block == net.minecraft.world.level.block.Blocks.BLACKSTONE)
 			speed /= NWConfig.Common.STONE_MINE_SPEED_MULTIPLIER.get();
+
+		if (block == net.minecraft.world.level.block.Blocks.TUFF
+						|| block == net.minecraft.world.level.block.Blocks.BLACKSTONE)
+			speed /= 2;
 
 		event.setNewSpeed(speed);
 	}

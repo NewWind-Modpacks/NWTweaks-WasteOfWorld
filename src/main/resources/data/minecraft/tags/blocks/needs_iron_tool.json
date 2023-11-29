@@ -1,12 +1,12 @@
 {
   "values": [
+    "minecraft:deepslate",
+    "minecraft:tuff",
+    "minecraft:blackstone",
     "nwtweaks:chipped_stone",
-    "nwtweaks:chipped_deepslate",
     "nwtweaks:chipped_granite",
     "nwtweaks:chipped_diorite",
     "nwtweaks:chipped_andesite",
-    "nwtweaks:chipped_tuff",
-    "nwtweaks:chipped_dripstone_block",
-    "nwtweaks:chipped_blackstone"
+    "nwtweaks:chipped_dripstone_block"
   ]
 }

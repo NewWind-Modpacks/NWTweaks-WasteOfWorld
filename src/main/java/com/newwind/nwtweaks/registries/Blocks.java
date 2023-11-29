@@ -77,7 +77,7 @@ public class Blocks {
 	public static final RegistryObject<Block> CHIPPED_TUFF = BLOCKS.register(
 					"chipped_tuff", () -> new ChippedBlock(
 									BlockBehaviour.Properties.of(Material.STONE)
-													.strength(3f, 6f)
+													.strength(6f, 6f)
 													.requiresCorrectToolForDrops()
 													.sound(SoundType.STONE)
 													.color(MaterialColor.TERRACOTTA_GRAY)
@@ -95,7 +95,7 @@ public class Blocks {
 	public static final RegistryObject<Block> CHIPPED_BLACKSTONE = BLOCKS.register(
 					"chipped_blackstone", () -> new ChippedBlock(
 									BlockBehaviour.Properties.of(Material.STONE)
-													.strength(3f, 6f)
+													.strength(6f, 6f)
 													.requiresCorrectToolForDrops()
 													.color(MaterialColor.COLOR_BLACK)
 					)
@@ -127,7 +127,7 @@ public class Blocks {
 	public static final RegistryObject<Block> COBBLED_TUFF = BLOCKS.register(
 					"cobbled_tuff", () -> new Block(
 									BlockBehaviour.Properties.of(Material.STONE)
-													.strength(2f, 6f)
+													.strength(3.5f, 6f)
 													.requiresCorrectToolForDrops()
 													.color(MaterialColor.TERRACOTTA_GRAY)
 					)
@@ -143,7 +143,7 @@ public class Blocks {
 	public static final RegistryObject<Block> COBBLED_BLACKSTONE = BLOCKS.register(
 					"cobbled_blackstone", () -> new Block(
 									BlockBehaviour.Properties.of(Material.STONE)
-													.strength(2f, 6f)
+													.strength(3.5f, 6f)
 													.requiresCorrectToolForDrops()
 													.color(MaterialColor.COLOR_BLACK)
 					)

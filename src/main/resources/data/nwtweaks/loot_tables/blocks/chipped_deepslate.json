@@ -2,19 +2,66 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "bonus_rolls": 0.0,
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "nwtweaks:deepslate_rock",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": 3,
+              "conditions": [
+                {
+                  "condition": "minecraft:inverted",
+                  "term": {
+                    "condition": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                      "type": "minecraft:player"
+                    }
+                  }
+                },
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "nwtweaks:chipped_deepslate",
+                  "properties": {
+                    "stage": "0"
+                  }
+                }
+              ]
+            },
+            {
+              "function": "minecraft:set_count",
+              "count": 2,
+              "conditions": [
+                {
+                  "condition": "minecraft:inverted",
+                  "term": {
+                    "condition": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                      "type": "minecraft:player"
+                    }
+                  }
+                },
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "nwtweaks:chipped_deepslate",
+                  "properties": {
+                    "stage": "1"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
       "conditions": [
         {
           "condition": "minecraft:survives_explosion"
         }
-      ],
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "nwtweaks:deepslate_rock"
-        }
-      ],
-      "rolls": 1.0
+      ]
     }
   ]
 }

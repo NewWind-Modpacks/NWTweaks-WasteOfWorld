@@ -1,0 +1,27 @@
+{
+  "parent": "nwtweaks:recipes/root",
+  "criteria": {
+    "rock_obtained": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "nwtweaks:dripstone_rock"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "rock_obtained"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "nwtweaks:cobble/dripstone"
+    ]
+  }
+}

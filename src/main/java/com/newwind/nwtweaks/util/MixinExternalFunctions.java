@@ -2,12 +2,13 @@ package com.newwind.nwtweaks.util;
 
 import com.github.wolfiewaffle.hardcore_torches.init.ItemInit;
 import com.mojang.datafixers.util.Pair;
-import com.newwind.nwtweaks.client.NWClient;
+import com.newwind.nwtweaks.NWConfig;
 import fuzs.thinair.advancements.AirSource;
 import fuzs.thinair.helper.AirHelper;
 import fuzs.thinair.helper.AirQualityLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -16,11 +17,27 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.curios.api.CuriosApi;
 
+import java.util.List;
 import java.util.function.Predicate;
 
 public class MixinExternalFunctions {
+
+	public static boolean hasAnimationDisablerStack(Player player) {
+		List<? extends String> items = NWConfig.Client.PARCOOL_NOT_ANIMATE.get();
+		Item stack = player.getMainHandItem().getItem();
+		for (String item : items) {
+			if (item.equals("minecraft:air")) {
+				if (!stack.equals(Items.AIR))
+					return true;
+			} else //noinspection DataFlowIssue
+				if (ForgeRegistries.ITEMS.getValue(new ResourceLocation(item)).equals(stack))
+					return true;
+		}
+		return false;
+	}
 
 	public static class CaveLantern {
 
@@ -34,13 +51,7 @@ public class MixinExternalFunctions {
 						ItemInit.LIT_SOUL_LANTERN.get()
 		};
 
-		private static final Predicate<ItemStack> validLightSources = new Predicate<ItemStack>() {
-			@Override
-			public boolean test(ItemStack itemStack) {
-				return isValidLightSource(itemStack.getItem());
-			}
-
-		};
+		private static final Predicate<ItemStack> validLightSources = itemStack -> isValidLightSource(itemStack.getItem());
 
 		private static boolean isValidLightSource(Item item) {
 			for (Item validLightItem : validLightItems) {
@@ -65,13 +76,7 @@ public class MixinExternalFunctions {
 						Items.SOUL_LANTERN,
 						ItemInit.LIT_SOUL_LANTERN.get()
 		};
-		private static final Predicate<ItemStack> validSoulSources = new Predicate<ItemStack>() {
-			@Override
-			public boolean test(ItemStack itemStack) {
-				return isValidSoulSource(itemStack.getItem());
-			}
-
-		};
+		private static final Predicate<ItemStack> validSoulSources = itemStack -> isValidSoulSource(itemStack.getItem());
 
 		public static Pair<AirQualityLevel, AirSource> getO2FromEntity(Entity entity) {
 			Level world = entity.getLevel();

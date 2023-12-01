@@ -164,6 +164,7 @@ dependencies {
     implementation fg.deobf("curse.maven:hardcore-torches-forge-576846:4676485")
     implementation fg.deobf("curse.maven:hitmarker-reforged-689192:4034599")
     implementation fg.deobf("curse.maven:kiwi-303657:4451128")
+    implementation fg.deobf("curse.maven:mgs-aiming-698486:4540133")
     implementation fg.deobf("curse.maven:mrcrayfishs-gun-mod-289479:4718583")
     implementation fg.deobf("curse.maven:mutil-351914:3941314")
     implementation fg.deobf("curse.maven:new-thin-air-878379:4843766")
@@ -186,6 +187,7 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:lucent-493280:4085139")
     runtimeOnly fg.deobf("curse.maven:puzzles-lib-495476:4600775")
     runtimeOnly fg.deobf("curse.maven:reforgium-853424:4505759")
+    runtimeOnly fg.deobf("curse.maven:shoulder-surfing-reloaded-243190:4876020")
 
     runtimeOnly fg.deobf("curse.maven:spark-361579:4505309")
 }

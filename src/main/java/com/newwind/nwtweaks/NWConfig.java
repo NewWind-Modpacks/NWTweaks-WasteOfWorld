@@ -1,6 +1,8 @@
 package com.newwind.nwtweaks;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Arrays;
 import java.util.List;
@@ -160,12 +162,17 @@ public class NWConfig {
 		public static final ForgeConfigSpec.ConfigValue<Boolean> RENDER_THIRST_EXHAUSTION;
 		public static final ForgeConfigSpec.ConfigValue<Boolean> RENDER_SANITY_TEXT;
 		public static final ForgeConfigSpec.DoubleValue ARROW_PASSIVE_SCALE;
+		public static final ForgeConfigSpec.ConfigValue<List<? extends String>> PARCOOL_NOT_ANIMATE;
 
 		static {
 			SNOW_CUTOUT = BUILDER.comment("Render minecraft:snow in the cutout RenderType layer.")
 							.define("Render Snow as Cutout", true);
 			BLOCK_SHADER_TOGGLE = BUILDER.comment("Disallows using F4 to toggle vanilla shaders, including winter.json. Ignores if F3 is held.")
 							.define("Block Shader Toggle", true);
+			PARCOOL_NOT_ANIMATE = BUILDER.comment("Items that stop the first-person animations from parcool when held.\nIf \"minecraft:air\" is used, anything that isn't an empty hand will cancel the animation")
+							.defineList("Parcool Animations Inhibitors", List.of(
+											"minecraft:air"
+							), i -> i instanceof String s && ForgeRegistries.ITEMS.getValue(new ResourceLocation(s)) != null);
 
 			BUILDER.push("Fog");
 			REGULAR_FOG_START = BUILDER.comment("Regular dark fog start.")

@@ -4,15 +4,12 @@ import com.alrex.parcool.config.ParCoolConfig;
 import com.newwind.nwtweaks.util.MixinExternalFunctions;
 import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ParCoolConfig.Client.Booleans.class)
 public abstract class ParCoolConfigClient {
-
-	@Shadow public abstract Object get();
 
 	@Inject(
 					method = "get()Ljava/lang/Boolean;",

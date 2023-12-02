@@ -19,6 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class StaringAtDweller implements IPassiveSanitySource {
 
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public float get(@NotNull ServerPlayer player, @NotNull ISanity iSanity, @NotNull ResourceLocation resourceLocation) {
 		Level level = player.getLevel();

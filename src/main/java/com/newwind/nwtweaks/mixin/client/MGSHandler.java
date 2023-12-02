@@ -17,12 +17,14 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(MgsAimingHandler.class)
 public abstract class MGSHandler {
 
-	@Shadow
+	@Shadow(remap = false)
+	@Final
+	private static Minecraft mc;
+
+	@Shadow(remap = false)
 	public static boolean checkItem(ItemStack item) {
 		return false;
 	}
-
-	@Shadow @Final private static Minecraft mc;
 
 	@Redirect(
 					method = "unaimEvent",

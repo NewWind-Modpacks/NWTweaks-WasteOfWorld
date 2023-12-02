@@ -18,6 +18,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
+import se.mickelus.tetra.items.modular.impl.shield.ModularShieldItem;
 import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.List;
@@ -37,6 +38,13 @@ public class MixinExternalFunctions {
 					return true;
 		}
 		return false;
+	}
+
+	public static Item isStackShield(ItemStack stack) {
+		if (stack.getItem() instanceof ModularShieldItem)
+			return Items.SHIELD;
+		else
+			return stack.getItem();
 	}
 
 	public static class CaveLantern {

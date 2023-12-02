@@ -132,6 +132,22 @@ repositories {
 
     maven { url "https://www.cursemaven.com" }
 
+    maven {
+        url "https://maven.pkg.github.com/NWTweaks-WasteOfWorld/radiantgear"
+        credentials {
+            username = System.getenv("GITHUB_ACTOR")
+            password = System.getenv("GITHUB_TOKEN")
+        }
+    }
+
+    maven {
+        url "https://maven.pkg.github.com/NWTweaks-WasteOfWorld/actions-of-stamina"
+        credentials {
+            username = System.getenv("GITHUB_ACTOR")
+            password = System.getenv("GITHUB_TOKEN")
+        }
+    }
+
     flatDir {
         dirs 'libs'
     }
@@ -144,8 +160,8 @@ dependencies {
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
-    implementation fg.deobf("com.ccr4ft3r.actionsofstamina:actions-of-stamina-1.19.2:0.5.0")
-    implementation fg.deobf("com.illusivesoulworks.radiantgear:radiantgear-forge-1.19.2:2.0.2")
+    implementation fg.deobf("com.ccr4ft3r:actions-of-stamina:37d2b634e22463ed9be4712e772861eb69f180a4")
+    implementation fg.deobf("com.illusivesoulworks.radiantgear:radiantgear-forge:4cf8673c83890a0e55d0f49c03c98f2c403df805")
 
     implementation fg.deobf("curse.maven:backpacked-352835:4725664")
     implementation fg.deobf("curse.maven:better-cave-dweller-922411:4795242")

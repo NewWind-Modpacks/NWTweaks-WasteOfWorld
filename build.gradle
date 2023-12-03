@@ -183,6 +183,7 @@ dependencies {
     implementation fg.deobf("curse.maven:mgs-aiming-698486:4540133")
     implementation fg.deobf("curse.maven:mrcrayfishs-gun-mod-289479:4718583")
     implementation fg.deobf("curse.maven:mutil-351914:3941314")
+    implementation fg.deobf("curse.maven:neat-238372:3878735")
     implementation fg.deobf("curse.maven:new-thin-air-878379:4843766")
     implementation fg.deobf("curse.maven:overflowing-bars-852662:4515133")
     implementation fg.deobf("curse.maven:parcool-482378:4772420")
@@ -196,6 +197,7 @@ dependencies {
     implementation fg.deobf("curse.maven:the-lost-cities-269024:4554187")
     implementation fg.deobf("curse.maven:tinyinv-455299:4401235")
     implementation fg.deobf("curse.maven:unionlib-367806:4547568")
+    implementation fg.deobf("curse.maven:xaeros-minimap-263420:4911810")
 
     runtimeOnly fg.deobf("curse.maven:configured-457570:4462837")
     runtimeOnly fg.deobf("curse.maven:curious-lanterns-621377:4538036")

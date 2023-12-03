@@ -55,6 +55,7 @@
     "client.MinecraftGameRenderer",
     "client.MinecraftKeyMapping",
     "client.MinecraftLocalPlayer",
+    "client.NeatHealthBarRenderer",
     "client.OBRowCountRenderer",
     "client.ParcoolAnimation",
     "client.ParCoolConfigClient",
@@ -62,7 +63,8 @@
     "client.SuGuiHelper",
     "client.TAThinAirClient",
     "client.TIClientEventHandler",
-    "client.TinyInvRenderUtils"
+    "client.TinyInvRenderUtils",
+    "client.XMModSettings"
   ],
   "minVersion": "0.8"
 }

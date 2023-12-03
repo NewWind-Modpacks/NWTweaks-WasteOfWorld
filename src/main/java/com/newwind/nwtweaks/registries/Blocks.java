@@ -12,7 +12,6 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-// TODO: cobbled textures and recipe advancements
 @SuppressWarnings("unused")
 public class Blocks {
 

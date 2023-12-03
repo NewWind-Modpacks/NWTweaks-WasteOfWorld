@@ -133,7 +133,7 @@ repositories {
     maven { url "https://www.cursemaven.com" }
 
     maven {
-        url "https://maven.pkg.github.com/NWTweaks-WasteOfWorld/radiantgear"
+        url "https://maven.pkg.github.com/NewWind-Modpacks/radiantgear"
         credentials {
             username = System.getenv("GITHUB_ACTOR")
             password = System.getenv("GITHUB_TOKEN")
@@ -141,7 +141,7 @@ repositories {
     }
 
     maven {
-        url "https://maven.pkg.github.com/NWTweaks-WasteOfWorld/actions-of-stamina"
+        url "https://maven.pkg.github.com/NewWind-Modpacks/actions-of-stamina"
         credentials {
             username = System.getenv("GITHUB_ACTOR")
             password = System.getenv("GITHUB_TOKEN")

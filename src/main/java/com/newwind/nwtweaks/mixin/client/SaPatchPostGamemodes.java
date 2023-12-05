@@ -30,7 +30,7 @@ public class SaPatchPostGamemodes implements IPostProcessRenderizable {
 		this.m_time += partialTicks;
 		Minecraft mc = Minecraft.getInstance();
 		if (mc.player != null) {
-			@SuppressWarnings("all")
+			@SuppressWarnings("rawtypes")
 			Iterator var3 = this.passEntries.iterator();
 
 			while (true) {

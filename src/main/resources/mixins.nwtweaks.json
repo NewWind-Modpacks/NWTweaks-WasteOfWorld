@@ -60,6 +60,7 @@
     "client.ParcoolAnimation",
     "client.ParCoolConfigClient",
     "client.SaPatchPostGamemodes",
+    "client.SodiumShaderLoader",
     "client.SuGuiHelper",
     "client.TAThinAirClient",
     "client.TIClientEventHandler",

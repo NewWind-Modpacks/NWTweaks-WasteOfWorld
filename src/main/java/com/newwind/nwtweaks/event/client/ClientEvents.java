@@ -64,6 +64,17 @@ public class ClientEvents {
 	}
 
 	@SubscribeEvent
+	public static void onFogColor(ViewportEvent.ComputeFogColor event) {
+		if (NWClient.undergroundTransitionValue > 0.0F) {
+			float transitionValue = NWClient.undergroundTransitionValue;
+
+			event.setRed(Mth.lerp(transitionValue, event.getRed(), 0F));
+			event.setGreen(Mth.lerp(transitionValue, event.getGreen(), 0F));
+			event.setBlue(Mth.lerp(transitionValue, event.getBlue(), 0F));
+		}
+	}
+
+	@SubscribeEvent
 	public static void applyFogMods(ViewportEvent.RenderFog event) {
 		if (CommonUtils.isUnderground(Objects.requireNonNull(Minecraft.getInstance().player)))
 			NWClient.undergroundTransitionValue = Math.min(1.0F, NWClient.undergroundTransitionValue + Minecraft.getInstance().getDeltaFrameTime() / 100F);
@@ -73,18 +84,17 @@ public class ClientEvents {
 		if (NWClient.undergroundTransitionValue > 0.0F) {
 			float fogStart = event.getMode() == FogRenderer.FogMode.FOG_SKY ? 0.0F : NWConfig.Client.UNDERGROUND_FOG_START.get().floatValue();
 			float fogEnd = NWConfig.Client.UNDERGROUND_FOG_END.get().floatValue();
-			float[] fogOgColors = RenderSystem.getShaderFogColor();
+			//float[] fogOgColors = RenderSystem.getShaderFogColor();
 
 			float transitionValue = NWClient.undergroundTransitionValue;
 			applyFogDistance(Mth.lerp(transitionValue, NWConfig.Client.REGULAR_FOG_START.get().floatValue(), fogStart),
 							Mth.lerp(transitionValue, NWConfig.Client.REGULAR_FOG_END.get().floatValue(), fogEnd));
-			RenderSystem.setShaderFogColor(
+			/*RenderSystem.setShaderFogColor(
 							Mth.lerp(transitionValue, fogOgColors[0], 0.0F),
 							Mth.lerp(transitionValue, fogOgColors[1], 0.0F),
 							Mth.lerp(transitionValue, fogOgColors[2], 0.0F)
-			);
-		}
-		else
+			);*/
+		} else
 			applyRegularFog();
 	}
 

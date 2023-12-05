@@ -132,11 +132,16 @@ repositories {
 
     maven { url "https://www.cursemaven.com" }
 
-    maven {
-        url "https://maven.pkg.github.com/NewWind-Modpacks/radiantgear"
-        credentials {
-            username = System.getenv("GITHUB_ACTOR")
-            password = System.getenv("GITHUB_TOKEN")
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Modrinth"
+                url = "https://api.modrinth.com/maven"
+            }
+        }
+        forRepositories(fg.repository) // Only add this if you're using ForgeGradle, otherwise remove this line
+        filter {
+            includeGroup "maven.modrinth"
         }
     }
 
@@ -161,7 +166,6 @@ dependencies {
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     implementation fg.deobf("com.ccr4ft3r:actions-of-stamina:37d2b634e22463ed9be4712e772861eb69f180a4")
-    implementation fg.deobf("com.illusivesoulworks.radiantgear:radiantgear-forge:4cf8673c83890a0e55d0f49c03c98f2c403df805")
 
     implementation fg.deobf("curse.maven:backpacked-352835:4725664")
     implementation fg.deobf("curse.maven:better-cave-dweller-922411:4795242")
@@ -171,6 +175,7 @@ dependencies {
     implementation fg.deobf("curse.maven:compact-machines-224218:3907274")
     implementation fg.deobf("curse.maven:curios-309927:4523009")
     implementation fg.deobf("curse.maven:corpse-316582:3920717")
+    implementation fg.deobf("curse.maven:embeddium-908741:4900802")
     implementation fg.deobf("curse.maven:engulfing-darkness-514138:4073396")
     implementation fg.deobf("curse.maven:eyes-in-the-darkness-304719:3872340")
     implementation fg.deobf("curse.maven:feathers-699933:4573576")
@@ -198,6 +203,7 @@ dependencies {
     implementation fg.deobf("curse.maven:tinyinv-455299:4401235")
     implementation fg.deobf("curse.maven:unionlib-367806:4547568")
     implementation fg.deobf("curse.maven:xaeros-minimap-263420:4911810")
+    implementation fg.deobf("maven.modrinth:radiant-gear:2.0.2+1.19.2-forge")
 
     runtimeOnly fg.deobf("curse.maven:configured-457570:4462837")
     runtimeOnly fg.deobf("curse.maven:curious-lanterns-621377:4538036")

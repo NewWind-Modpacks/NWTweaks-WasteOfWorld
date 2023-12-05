@@ -129,7 +129,6 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
-
     maven { url "https://www.cursemaven.com" }
 
     exclusiveContent {
@@ -160,13 +159,13 @@ repositories {
 }
 
 dependencies {
-
     minecraft 'net.minecraftforge:forge:1.19.2-43.3.0'
-
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
+    // [Implementation] Source: Rehosted
     implementation fg.deobf("com.ccr4ft3r:actions-of-stamina:37d2b634e22463ed9be4712e772861eb69f180a4")
 
+    // [Implementation] Source: CurseMaven
     implementation fg.deobf("curse.maven:backpacked-352835:4725664")
     implementation fg.deobf("curse.maven:better-cave-dweller-922411:4795242")
     implementation fg.deobf("curse.maven:better-combat-by-daedelus-639842:4534619")
@@ -205,6 +204,10 @@ dependencies {
     implementation fg.deobf("curse.maven:xaeros-minimap-263420:4911810")
     implementation fg.deobf("maven.modrinth:radiant-gear:2.0.2+1.19.2-forge")
 
+    // [Implementation] Source: Modrinth Maven
+    implementation fg.deobf("maven.modrinth:radiant-gear:2.0.2+1.19.2-forge")
+
+    // [Runtime Only] Source: CurseMaven
     runtimeOnly fg.deobf("curse.maven:configured-457570:4462837")
     runtimeOnly fg.deobf("curse.maven:curious-lanterns-621377:4538036")
     runtimeOnly fg.deobf("curse.maven:connectedness-853916:4506203")
@@ -212,15 +215,12 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:puzzles-lib-495476:4600775")
     runtimeOnly fg.deobf("curse.maven:reforgium-853424:4505759")
     runtimeOnly fg.deobf("curse.maven:shoulder-surfing-reloaded-243190:4876020")
-
     runtimeOnly fg.deobf("curse.maven:spark-361579:4505309")
 }
 
 mixin {
-
     add sourceSets.main, 'mixins.nwtweaks.refmap.json'
     config 'mixins.nwtweaks.json'
-
 }
 
 // Example for how to get properties into the manifest for reading at runtime.

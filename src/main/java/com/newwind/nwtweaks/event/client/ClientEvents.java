@@ -11,15 +11,20 @@ import com.newwind.nwtweaks.util.CommonUtils;
 import com.newwind.nwtweaks.world.items.PillItem;
 import fuzs.thinair.init.ModRegistry;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.OptionInstance;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.FogRenderer;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -33,6 +38,16 @@ import java.util.Objects;
 public class ClientEvents {
 
 	private static double nameDrawHeight = 0.0D;
+
+	@SubscribeEvent
+	public static void onRenderTick(TickEvent.RenderTickEvent event) {
+		if (event.phase == TickEvent.Phase.START) {
+			int maxRenderDistance = (int) Math.ceil(NWConfig.Client.MAX_FOG_END.get() / 16D);
+			OptionInstance<Integer> renderDistance = Minecraft.getInstance().options.renderDistance();
+			if (renderDistance.get() > maxRenderDistance)
+				renderDistance.set(maxRenderDistance);
+		}
+	}
 
 	public static void updateNameDrawHeight(int left, int right) {
 		int height = Math.max(left, right);
@@ -84,18 +99,27 @@ public class ClientEvents {
 		if (NWClient.undergroundTransitionValue > 0.0F) {
 			float fogStart = event.getMode() == FogRenderer.FogMode.FOG_SKY ? 0.0F : NWConfig.Client.UNDERGROUND_FOG_START.get().floatValue();
 			float fogEnd = NWConfig.Client.UNDERGROUND_FOG_END.get().floatValue();
-			//float[] fogOgColors = RenderSystem.getShaderFogColor();
+			float regularFogEnd = getSurfaceFogEnd();
 
 			float transitionValue = NWClient.undergroundTransitionValue;
 			applyFogDistance(Mth.lerp(transitionValue, NWConfig.Client.REGULAR_FOG_START.get().floatValue(), fogStart),
-							Mth.lerp(transitionValue, NWConfig.Client.REGULAR_FOG_END.get().floatValue(), fogEnd));
-			/*RenderSystem.setShaderFogColor(
-							Mth.lerp(transitionValue, fogOgColors[0], 0.0F),
-							Mth.lerp(transitionValue, fogOgColors[1], 0.0F),
-							Mth.lerp(transitionValue, fogOgColors[2], 0.0F)
-			);*/
+							Mth.lerp(transitionValue, regularFogEnd, fogEnd));
 		} else
 			applyRegularFog();
+	}
+
+	private static void applyRegularFog() {
+		applyFogDistance(NWConfig.Client.REGULAR_FOG_START.get().floatValue(), getSurfaceFogEnd());
+	}
+
+	private static float getSurfaceFogEnd() {
+		LocalPlayer player = Minecraft.getInstance().player;
+		float maxFogEnd = NWConfig.Client.MAX_FOG_END.get().floatValue();
+		float regularFogEnd = NWConfig.Client.REGULAR_FOG_END.get().floatValue();
+		float fogEnd = Math.min(regularFogEnd, maxFogEnd);
+		if (player != null && player.hasEffect(MobEffects.NIGHT_VISION))
+			fogEnd += (maxFogEnd - regularFogEnd) * GameRenderer.getNightVisionScale(player, 1f);
+		return fogEnd;
 	}
 
 	private static void applyFogDistance(float fogStart, float fogEnd) {
@@ -116,11 +140,6 @@ public class ClientEvents {
 
 		if (fogStart < currentFogStart)
 			RenderSystem.setShaderFogStart(fogStart);
-	}
-
-	private static void applyRegularFog() {
-		applyFogDistance(NWConfig.Client.REGULAR_FOG_START.get().floatValue(),
-						NWConfig.Client.REGULAR_FOG_END.get().floatValue());
 	}
 
 	@Mod.EventBusSubscriber(modid = NWTweaks.MODID, value = Dist.CLIENT, bus = Bus.MOD)

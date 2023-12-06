@@ -154,6 +154,7 @@ public class NWConfig {
 		public static final ForgeConfigSpec.ConfigValue<Boolean> BLOCK_SHADER_TOGGLE;
 		public static final ForgeConfigSpec.DoubleValue REGULAR_FOG_START;
 		public static final ForgeConfigSpec.DoubleValue REGULAR_FOG_END;
+		public static final ForgeConfigSpec.DoubleValue MAX_FOG_END;
 		public static final ForgeConfigSpec.DoubleValue UNDERGROUND_FOG_START;
 		public static final ForgeConfigSpec.DoubleValue UNDERGROUND_FOG_END;
 		public static final ForgeConfigSpec.DoubleValue DESATURATION_FACTOR;
@@ -175,10 +176,12 @@ public class NWConfig {
 							), i -> i instanceof String s && ForgeRegistries.ITEMS.getValue(new ResourceLocation(s)) != null);
 
 			BUILDER.push("Fog");
-			REGULAR_FOG_START = BUILDER.comment("Regular dark fog start.")
+			REGULAR_FOG_START = BUILDER.comment("Regular fog start.")
 							.defineInRange("Regular Fog Start", 96D, -512D, 512D);
-			REGULAR_FOG_END = BUILDER.comment("Regular dark fog end.")
+			REGULAR_FOG_END = BUILDER.comment("Regular fog end.")
 							.defineInRange("Regular Fog End", 128D, -512D, 512D);
+			MAX_FOG_END = BUILDER.comment("Fog end when night vision is active, also controls max render distance in blocks.")
+							.defineInRange("Max Fog End", 128D, -512D, 512D);
 			UNDERGROUND_FOG_START = BUILDER.comment("Underground dark fog start.")
 							.defineInRange("Underground Fog Start", 0D, -512D, 512D);
 			UNDERGROUND_FOG_END = BUILDER.comment("Underground dark fog end.")

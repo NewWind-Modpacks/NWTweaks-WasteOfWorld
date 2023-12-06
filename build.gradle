@@ -191,6 +191,7 @@ dependencies {
     implementation fg.deobf("curse.maven:new-thin-air-878379:4843766")
     implementation fg.deobf("curse.maven:overflowing-bars-852662:4515133")
     implementation fg.deobf("curse.maven:parcool-482378:4772420")
+    implementation fg.deobf("curse.maven:physics-mod-442735:4750433")
     implementation fg.deobf("curse.maven:playeranimator-658587:4418149")
     implementation fg.deobf("curse.maven:puffish-skills-835091:4744360")
     implementation fg.deobf("curse.maven:puzzles-lib-495476:4600775")

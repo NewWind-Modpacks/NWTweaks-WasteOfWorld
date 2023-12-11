@@ -15,6 +15,7 @@ import com.newwind.nwtweaks.registries.Attributes;
 import com.newwind.nwtweaks.registries.Blocks;
 import com.newwind.nwtweaks.util.BreakChecks;
 import com.newwind.nwtweaks.util.CommonUtils;
+import com.newwind.nwtweaks.util.ExpirableUtils;
 import com.newwind.nwtweaks.util.RadUtil;
 import com.newwind.nwtweaks.world.blocks.ChippedBlock;
 import com.newwind.nwtweaks.world.items.PillItem;
@@ -45,6 +46,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
@@ -57,8 +60,10 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.ShieldBlockEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -214,6 +219,16 @@ public class CommonEvents {
 	}
 
 	@SubscribeEvent
+	public static void onBlockUse(PlayerInteractEvent.RightClickBlock event) {
+		Player player = event.getEntity();
+		BlockPos pos = event.getPos();
+		Level level = player.getLevel();
+		BlockEntity blockEntity = level.getBlockEntity(pos);
+		if (event.getUseBlock() != Event.Result.DENY && blockEntity != null)
+			ExpirableUtils.touch(blockEntity);
+	}
+
+	@SubscribeEvent
 	public static void onBlockBreak(final BlockEvent.BreakEvent event) {
 
 		BlockState state = event.getState();
@@ -320,7 +335,7 @@ public class CommonEvents {
 	}
 
 	@SubscribeEvent
-	public static void onAttachCapabilitiesLiving(AttachCapabilitiesEvent<Entity> event) {
+	public static void onAttachCapabilitiesEntity(AttachCapabilitiesEvent<Entity> event) {
 		if (event.getObject() instanceof LivingEntity livingEntity) {
 			if (!livingEntity.getCapability(IsUndergroundProvider.CAPABILITY).isPresent()) {
 				event.addCapability(new ResourceLocation(NWTweaks.MODID, "is_underground"), new IsUndergroundProvider());
@@ -334,6 +349,15 @@ public class CommonEvents {
 					event.addCapability(new ResourceLocation(NWTweaks.MODID, "red_dweller"), new RedDwellerProvider());
 				}
 			}
+		}
+	}
+
+	@SubscribeEvent
+	public static void onAttachCapabilitiesBlockEntity(AttachCapabilitiesEvent<BlockEntity> event) {
+		BlockEntity blockEntity = event.getObject();
+
+		if (blockEntity instanceof AbstractFurnaceBlockEntity) {
+			event.addCapability(new ResourceLocation(NWTweaks.MODID, "expirable_container"), new ExpirableContainerProvider());
 		}
 	}
 
@@ -412,6 +436,7 @@ public class CommonEvents {
 			event.register(IsUnderground.class);
 			event.register(BladderAir.class);
 			event.register(RedDweller.class);
+			event.register(ExpirableContainer.class);
 		}
 
 		@SubscribeEvent

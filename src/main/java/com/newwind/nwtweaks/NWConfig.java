@@ -43,6 +43,9 @@ public class NWConfig {
 		public static final ForgeConfigSpec.DoubleValue RED_DWELLER_STARE_SANITY_MOD;
 		public static final ForgeConfigSpec.IntValue RED_DWELLER_SPAWN_TIME;
 		public static final ForgeConfigSpec.DoubleValue STONE_MINE_SPEED_MULTIPLIER;
+		public static final ForgeConfigSpec.IntValue CONTAINER_LONE_TICKS;
+		public static final ForgeConfigSpec.DoubleValue CONTAINER_COMPANY_RANGE;
+		public static final ForgeConfigSpec.BooleanValue CONTAINER_DROP_INPUT_INSTANTLY;
 
 		static {
 
@@ -64,6 +67,15 @@ public class NWConfig {
 							.defineList("Deep Pockets Costs", List.of(30), Integer.class::isInstance);
 			BACKPACK_MIN_POWER = BUILDER.comment("Minimum power required on a enchanting table for a backpack to be enchantable.")
 							.defineInRange("Minimum Enchanting Table Power", 30, 0, 30);
+			BUILDER.pop();
+
+			BUILDER.push("Container Limiting");
+			CONTAINER_LONE_TICKS = BUILDER.comment("Time before an inactive container drops it's contents after being left alone.")
+							.defineInRange("Container Lone Ticks", 24000, -1, Integer.MAX_VALUE);
+			CONTAINER_COMPANY_RANGE = BUILDER.comment("How far a container has to be from any player to be considered \"alone\".")
+							.defineInRange("Container Company Range", 64D, 0D, 1024D);
+			CONTAINER_DROP_INPUT_INSTANTLY = BUILDER.comment("Drop a container's input the moment it's inactive or when the output drops (true for the former).")
+							.define("Container Drop Input Instantly", true);
 			BUILDER.pop();
 
 			BUILDER.comment("Underground air is unbreathable and the darkness consumes.")

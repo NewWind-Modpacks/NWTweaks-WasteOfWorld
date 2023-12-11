@@ -24,8 +24,8 @@ public class AOSPlayerUtil {
 			if (parkourability == null) {
 				return false;
 			} else {
-				Crawl crawl = (Crawl) parkourability.get(Crawl.class);
-				return crawl == null ? false : crawl.isDoing();
+				Crawl crawl = parkourability.get(Crawl.class);
+				return crawl != null && crawl.isDoing();
 			}
 		}
 	}

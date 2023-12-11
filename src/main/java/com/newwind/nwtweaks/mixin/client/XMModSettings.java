@@ -24,4 +24,17 @@ public class XMModSettings {
 		if (player != null && CommonUtils.isUnderground(player))
 			cir.setReturnValue(false);
 	}
+
+	@Inject(
+					method = "getShowIngameWaypoints",
+					at = @At("HEAD"),
+					cancellable = true,
+					remap = false
+	)
+	private void disableWaypointsUnderground(CallbackInfoReturnable<Boolean> cir) {
+		Minecraft mc = Minecraft.getInstance();
+		LocalPlayer player = mc.player;
+		if (player != null && CommonUtils.isUnderground(player))
+			cir.setReturnValue(false);
+	}
 }

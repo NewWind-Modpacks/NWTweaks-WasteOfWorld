@@ -1,6 +1,12 @@
 package com.newwind.nwtweaks.util;
 
 import com.github.wolfiewaffle.hardcore_torches.init.ItemInit;
+import com.illusivesoulworks.diet.api.DietApi;
+import com.illusivesoulworks.diet.api.type.IDietGroup;
+import com.illusivesoulworks.diet.api.type.IDietResult;
+import com.illusivesoulworks.diet.api.type.IDietTracker;
+import com.illusivesoulworks.diet.common.capability.DietCapability;
+import com.illusivesoulworks.diet.common.data.group.DietGroups;
 import com.mojang.datafixers.util.Pair;
 import com.newwind.nwtweaks.NWConfig;
 import fuzs.thinair.advancements.AirSource;
@@ -9,6 +15,7 @@ import fuzs.thinair.helper.AirQualityLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -18,10 +25,16 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 import se.mickelus.tetra.items.modular.impl.shield.ModularShieldItem;
 import top.theillusivec4.curios.api.CuriosApi;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
 public class MixinExternalFunctions {
@@ -143,6 +156,61 @@ public class MixinExternalFunctions {
 			else
 				return o2Pair;
 		}
+	}
+
+	public static float getFoodModifier(Player player, ItemStack stack) {
+		AtomicReference<Float> nutritionModifier = new AtomicReference<>(1f);
+		DietCapability.get(player).ifPresent(tracker -> {
+			DietApi dietInstance = DietApi.getInstance();
+
+			IDietResult stackGroups = dietInstance.get(player, stack);
+			if (!stackGroups.get().isEmpty()) {
+				Set<IDietGroup> foodGroups = DietGroups.getGroups(player.getLevel());
+				HashMap<String, Float> groupMods = getFoodGroupMods(tracker, foodGroups);
+
+				AtomicReference<Float> totalStackValues = new AtomicReference<>(0f);
+				stackGroups.get().forEach((group, value) -> totalStackValues.updateAndGet(v -> v + value));
+
+				AtomicReference<Float> difference = new AtomicReference<>((float) 0);
+				stackGroups.get().forEach((group, value) -> {
+					float stackPercent = value / totalStackValues.get();
+					difference.updateAndGet(v -> v + (stackPercent * groupMods.get(group.getName())));
+				});
+
+				float minBound = NWConfig.Common.NUTRITION_MIN_DIFFERENCE.get().floatValue();
+				float maxBound = NWConfig.Common.NUTRITION_MAX_DIFFERENCE.get().floatValue();
+
+				difference.getAndUpdate(v -> Mth.clamp(
+								( v - minBound) / (maxBound - minBound),
+								0f, 1f));
+
+				nutritionModifier.set(1f - difference.get());
+			}
+		});
+		return nutritionModifier.get();
+	}
+
+	@NotNull
+	private static HashMap<String, Float> getFoodGroupMods(IDietTracker tracker, Set<IDietGroup> foodGroups) {
+		Map<String, Float> playerGroups = tracker.getValues();
+
+		AtomicReference<Float> atomicPlayerAverage = new AtomicReference<>(0f);
+		AtomicInteger atomicBeneficialSize = new AtomicInteger();
+		playerGroups.forEach((group, value) -> {
+			for (IDietGroup foodGroup : foodGroups)
+				if (foodGroup.getName().equals(group)) {
+					if (foodGroup.isBeneficial()) {
+						atomicPlayerAverage.updateAndGet(v -> v + value);
+						atomicBeneficialSize.getAndIncrement();
+					}
+					return;
+				}
+		});
+		float playerAverage = atomicPlayerAverage.get() / atomicBeneficialSize.get();
+
+		HashMap<String, Float> groupMods = new HashMap<>();
+		playerGroups.forEach((group, value) -> groupMods.put(group, value - playerAverage));
+		return groupMods;
 	}
 
 }

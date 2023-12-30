@@ -46,6 +46,8 @@ public class NWConfig {
 		public static final ForgeConfigSpec.IntValue CONTAINER_LONE_TICKS;
 		public static final ForgeConfigSpec.DoubleValue CONTAINER_COMPANY_RANGE;
 		public static final ForgeConfigSpec.BooleanValue CONTAINER_DROP_INPUT_INSTANTLY;
+		public static final ForgeConfigSpec.DoubleValue NUTRITION_MIN_DIFFERENCE;
+		public static final ForgeConfigSpec.DoubleValue NUTRITION_MAX_DIFFERENCE;
 
 		static {
 
@@ -57,8 +59,15 @@ public class NWConfig {
 							.defineInRange("Compact Machines Unavailability End", 1000, 0, 23999);
 			BUILDER.pop();
 
-			FEATHERS_STALL_TEMP = BUILDER.comment("Temperature at which feathers stop regenerating. 0.0 is normal temperature, 1.0 is same as when receiving damage")
+			FEATHERS_STALL_TEMP = BUILDER.comment("Temperature at which feathers stop regenerating. 0.0 is normal temperature, 1.0 is same as when receiving damage.")
 							.defineInRange("Feather's Freeze Temperature", 0.6, 0.0, 2.0);
+
+			BUILDER.push("Nutrition");
+			NUTRITION_MIN_DIFFERENCE = BUILDER.comment("Minimal difference to the average (not including non beneficial groups) for a food's nutrition to be affected.")
+							.defineInRange("Nutrition Minimal Difference Debuff", 0.3, 0.0, 1.0);
+			NUTRITION_MAX_DIFFERENCE = BUILDER.comment("Difference at which the food will no longer replenish hunger.")
+							.defineInRange("Nutrition Maximal Difference Debuff", 0.7, 0.0, 1.0);
+			BUILDER.pop();
 
 			BUILDER.push("Backpack");
 			BACKPACK_SIZES = BUILDER.comment("Inventory slots that the backpack gives. First is non enchanted and the rest are an enchantment level each. Non-accumulative.")

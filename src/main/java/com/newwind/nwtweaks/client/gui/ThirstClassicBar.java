@@ -9,7 +9,6 @@ import com.stereowalker.survive.world.effect.SMobEffects;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
-import tfar.classicbar.config.ClassicBarsConfig;
 import tfar.classicbar.impl.BarOverlayImpl;
 import tfar.classicbar.util.Color;
 import tfar.classicbar.util.ModUtils;
@@ -33,28 +32,34 @@ public class ThirstClassicBar extends BarOverlayImpl {
 		double barWidth = getBarWidth(player);
 		Color.reset();
 		renderFullBarBackground(poseStack, xStart, yStart);
+		renderOverthirst(poseStack, player, xStart, yStart);
+
 		double f = xStart + (rightHandSide() ? WIDTH - barWidth : 0);
 		Color color = getPrimaryBarColor(0, player);
 		color.color2Gl();
 		renderPartialBar(poseStack, f + 2, yStart + 2, barWidth);
 
 
-//		float hydratation = realisticPlayer.getWaterData().getHydrationLevel();
-//		if (hydratation > 0 && ClassicBarsConfig.showSaturationBar.get()) {
-//			HYDRO_COLOR.color2Gl();
-//			double hydroWidth = getHydroWidth(player);
-//			f = xStart + (rightHandSide() ? BarOverlayImpl.WIDTH - hydroWidth : 0);
-//			renderPartialBar(poseStack,f + 2, yStart + 2, hydroWidth);
-//		}
-
 		if (NWConfig.Client.RENDER_THIRST_EXHAUSTION.get()) {
-			float wExhaustion = ((IWaterData) (Object) realisticPlayer.getWaterData()).nwTweaks$getExhaustion();
+			float wExhaustion = ((IWaterData) realisticPlayer.getWaterData()).nwTweaks$getExhaustion();
 			wExhaustion = Math.min(wExhaustion, 4F);
 			f = xStart + (rightHandSide() ? BarOverlayImpl.WIDTH - ModUtils.getWidth(wExhaustion, 4) : 0);
 			//draw exhaustion
 			RenderSystem.setShaderColor(1, 1, 1, .25f);
 			ModUtils.drawTexturedModalRect(poseStack, f + 2, yStart + 1, 1, 28, ModUtils.getWidth(wExhaustion, 4f), 9);
 		}
+	}
+
+	private void renderOverthirst(PoseStack matrices, Player player, int xStart, int yStart) {
+		IRealisticEntity realisticPlayer = (IRealisticEntity) player;
+		double waterL = realisticPlayer.getWaterData().getWaterLevel();
+
+		double overflow = Math.max(waterL - MAX_WATER, 0D);
+		double width = Math.min(Math.ceil(81D * overflow / 20D), 81D);
+
+		Color.RED.color2Gl();
+		ModUtils.drawTexturedModalRect(matrices, xStart, yStart, 0, 0, width, 9);
+		Color.reset();
 	}
 
 	@Override

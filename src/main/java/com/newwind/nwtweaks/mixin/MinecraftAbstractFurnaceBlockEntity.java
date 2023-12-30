@@ -58,30 +58,6 @@ public abstract class MinecraftAbstractFurnaceBlockEntity implements IAbstractFu
 	@Shadow
 	protected abstract boolean isLit();
 
-//	@Inject(
-//					method = "setItem",
-//					at = @At("HEAD")
-//	)
-//	private void onSetItem(int p_58333_, ItemStack p_58334_, CallbackInfo ci) {
-//		ExpirableUtils.touch(((AbstractFurnaceBlockEntity) ((Object) this)));
-//	}
-//
-//	@Inject(
-//					method = "removeItem",
-//					at = @At("HEAD")
-//	)
-//	private void onRemoveItem(int p_58330_, int p_58331_, CallbackInfoReturnable<ItemStack> cir) {
-//		ExpirableUtils.touch(((AbstractFurnaceBlockEntity) ((Object) this)));
-//	}
-//
-//	@Inject(
-//					method = "removeItemNoUpdate",
-//					at = @At("HEAD")
-//	)
-//	private void onRemoveItemNoUpdate(int p_58387_, CallbackInfoReturnable<ItemStack> cir) {
-//		ExpirableUtils.touch(((AbstractFurnaceBlockEntity) ((Object) this)));
-//	}
-
 	@Unique
 	public boolean nWTweaks$isUnlit() {
 		return !this.isLit();

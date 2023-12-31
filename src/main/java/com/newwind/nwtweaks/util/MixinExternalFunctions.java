@@ -60,6 +60,68 @@ public class MixinExternalFunctions {
 			return stack.getItem();
 	}
 
+	public static float getFoodModifier(Player player, ItemStack stack) {
+		AtomicReference<Float> nutritionModifier = new AtomicReference<>(1f);
+		DietCapability.get(player).ifPresent(tracker -> {
+			DietApi dietInstance = DietApi.getInstance();
+
+			IDietResult stackGroups = dietInstance.get(player, stack);
+			if (!stackGroups.get().isEmpty()) {
+				Set<IDietGroup> foodGroups = DietGroups.getGroups(player.getLevel());
+				HashMap<String, Float> groupMods = getFoodGroupMods(tracker, foodGroups);
+
+				AtomicReference<Float> totalStackValues = new AtomicReference<>(0f);
+				stackGroups.get().forEach((group, value) -> {
+					if (value <= 0)
+						value = 1f;
+					Float finalValue = value;
+					totalStackValues.updateAndGet(v -> v + finalValue);
+				});
+
+				AtomicReference<Float> difference = new AtomicReference<>((float) 0);
+				stackGroups.get().forEach((group, value) -> {
+					if (value <= 0f)
+						value = 1f;
+					float stackPercent = value / totalStackValues.get();
+					difference.updateAndGet(v -> v + (stackPercent * groupMods.get(group.getName())));
+				});
+
+				float minBound = NWConfig.Common.NUTRITION_MIN_DIFFERENCE.get().floatValue();
+				float maxBound = NWConfig.Common.NUTRITION_MAX_DIFFERENCE.get().floatValue();
+
+				difference.getAndUpdate(v -> Mth.clamp(
+								(v - minBound) / (maxBound - minBound),
+								0f, 1f));
+
+				nutritionModifier.set(1f - difference.get());
+			}
+		});
+		return nutritionModifier.get();
+	}
+
+	@NotNull
+	private static HashMap<String, Float> getFoodGroupMods(IDietTracker tracker, Set<IDietGroup> foodGroups) {
+		Map<String, Float> playerGroups = tracker.getValues();
+
+		AtomicReference<Float> atomicPlayerAverage = new AtomicReference<>(0f);
+		AtomicInteger atomicBeneficialSize = new AtomicInteger();
+		playerGroups.forEach((group, value) -> {
+			for (IDietGroup foodGroup : foodGroups)
+				if (foodGroup.getName().equals(group)) {
+					if (foodGroup.isBeneficial()) {
+						atomicPlayerAverage.updateAndGet(v -> v + value);
+						atomicBeneficialSize.getAndIncrement();
+					}
+					return;
+				}
+		});
+		float playerAverage = atomicPlayerAverage.get() / atomicBeneficialSize.get();
+
+		HashMap<String, Float> groupMods = new HashMap<>();
+		playerGroups.forEach((group, value) -> groupMods.put(group, value - playerAverage));
+		return groupMods;
+	}
+
 	public static class CaveLantern {
 
 		private static final Item[] validLightItems = new Item[]{
@@ -156,61 +218,6 @@ public class MixinExternalFunctions {
 			else
 				return o2Pair;
 		}
-	}
-
-	public static float getFoodModifier(Player player, ItemStack stack) {
-		AtomicReference<Float> nutritionModifier = new AtomicReference<>(1f);
-		DietCapability.get(player).ifPresent(tracker -> {
-			DietApi dietInstance = DietApi.getInstance();
-
-			IDietResult stackGroups = dietInstance.get(player, stack);
-			if (!stackGroups.get().isEmpty()) {
-				Set<IDietGroup> foodGroups = DietGroups.getGroups(player.getLevel());
-				HashMap<String, Float> groupMods = getFoodGroupMods(tracker, foodGroups);
-
-				AtomicReference<Float> totalStackValues = new AtomicReference<>(0f);
-				stackGroups.get().forEach((group, value) -> totalStackValues.updateAndGet(v -> v + value));
-
-				AtomicReference<Float> difference = new AtomicReference<>((float) 0);
-				stackGroups.get().forEach((group, value) -> {
-					float stackPercent = value / totalStackValues.get();
-					difference.updateAndGet(v -> v + (stackPercent * groupMods.get(group.getName())));
-				});
-
-				float minBound = NWConfig.Common.NUTRITION_MIN_DIFFERENCE.get().floatValue();
-				float maxBound = NWConfig.Common.NUTRITION_MAX_DIFFERENCE.get().floatValue();
-
-				difference.getAndUpdate(v -> Mth.clamp(
-								( v - minBound) / (maxBound - minBound),
-								0f, 1f));
-
-				nutritionModifier.set(1f - difference.get());
-			}
-		});
-		return nutritionModifier.get();
-	}
-
-	@NotNull
-	private static HashMap<String, Float> getFoodGroupMods(IDietTracker tracker, Set<IDietGroup> foodGroups) {
-		Map<String, Float> playerGroups = tracker.getValues();
-
-		AtomicReference<Float> atomicPlayerAverage = new AtomicReference<>(0f);
-		AtomicInteger atomicBeneficialSize = new AtomicInteger();
-		playerGroups.forEach((group, value) -> {
-			for (IDietGroup foodGroup : foodGroups)
-				if (foodGroup.getName().equals(group)) {
-					if (foodGroup.isBeneficial()) {
-						atomicPlayerAverage.updateAndGet(v -> v + value);
-						atomicBeneficialSize.getAndIncrement();
-					}
-					return;
-				}
-		});
-		float playerAverage = atomicPlayerAverage.get() / atomicBeneficialSize.get();
-
-		HashMap<String, Float> groupMods = new HashMap<>();
-		playerGroups.forEach((group, value) -> groupMods.put(group, value - playerAverage));
-		return groupMods;
 	}
 
 }

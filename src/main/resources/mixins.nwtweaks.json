@@ -65,6 +65,8 @@
     "client.ParcoolAnimation",
     "client.ParCoolConfigClient",
     "client.PhysicsShaderResourceProvider",
+    "client.RWWolfArmorLayer",
+    "client.RWWolfArmorModel",
     "client.SaPatchPostGamemodes",
     "client.SodiumGameOptionPages",
     "client.SodiumShaderLoader",

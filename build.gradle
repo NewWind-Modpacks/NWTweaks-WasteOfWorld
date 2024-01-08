@@ -167,6 +167,7 @@ dependencies {
 
     // [Implementation] Source: CurseMaven
     implementation fg.deobf("curse.maven:backpacked-352835:4725664")
+    implementation fg.deobf("curse.maven:better-animations-collection-323976:4104791-sources")
     implementation fg.deobf("curse.maven:better-cave-dweller-922411:4795242")
     implementation fg.deobf("curse.maven:better-combat-by-daedelus-639842:4534619")
     implementation fg.deobf("curse.maven:classic-bars-317642:4430475")
@@ -195,6 +196,7 @@ dependencies {
     implementation fg.deobf("curse.maven:playeranimator-658587:4418149")
     implementation fg.deobf("curse.maven:puffish-skills-835091:4744360")
     implementation fg.deobf("curse.maven:puzzles-lib-495476:4600775")
+    implementation fg.deobf("curse.maven:revampedwolf-399945:4465597")
     implementation fg.deobf("curse.maven:sanity-descent-into-madness-876448:4632886")
     implementation fg.deobf("curse.maven:snow-real-magic-308663:4779691")
     implementation fg.deobf("curse.maven:survive-367337:4552172-sources")

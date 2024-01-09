@@ -28,6 +28,7 @@
     "MinecraftLivingEntity",
     "MinecraftPlayer",
     "MinecraftSnowLayer",
+    "MinecraftWolf",
     "SaDarkness",
     "SaHungry",
     "SaInWaterOrRain",

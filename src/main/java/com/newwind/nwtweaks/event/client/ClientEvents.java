@@ -5,8 +5,11 @@ import com.newwind.nwtweaks.NWConfig;
 import com.newwind.nwtweaks.NWTweaks;
 import com.newwind.nwtweaks.client.NWClient;
 import com.newwind.nwtweaks.client.gui.SanityClassicBar;
+import com.newwind.nwtweaks.client.world.entity.model.LootBagModel;
+import com.newwind.nwtweaks.client.world.entity.renderer.LootBagRenderer;
 import com.newwind.nwtweaks.client.world.item.renderer.AirBladderDecorator;
 import com.newwind.nwtweaks.networking.ModMessages;
+import com.newwind.nwtweaks.registries.EntityTypes;
 import com.newwind.nwtweaks.util.CommonUtils;
 import com.newwind.nwtweaks.world.items.PillItem;
 import fuzs.thinair.init.ModRegistry;
@@ -196,6 +199,16 @@ public class ClientEvents {
 		@SubscribeEvent
 		public static void registerGuiOverlays(RegisterGuiOverlaysEvent event) {
 			EventHandler.register(new SanityClassicBar());
+		}
+
+		@SubscribeEvent
+		public static void registerEntityLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+			event.registerLayerDefinition(LootBagModel.LAYER_LOCATION, LootBagModel::createBodyLayer);
+		}
+
+		@SubscribeEvent
+		public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
+			event.registerEntityRenderer(EntityTypes.LOOT_BAG.get(), LootBagRenderer::new);
 		}
 
 	}

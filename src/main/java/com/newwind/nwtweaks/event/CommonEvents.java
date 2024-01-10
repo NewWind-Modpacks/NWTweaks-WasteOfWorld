@@ -18,6 +18,7 @@ import com.newwind.nwtweaks.util.CommonUtils;
 import com.newwind.nwtweaks.util.ExpirableUtils;
 import com.newwind.nwtweaks.util.RadUtil;
 import com.newwind.nwtweaks.world.blocks.ChippedBlock;
+import com.newwind.nwtweaks.world.entities.LootBag;
 import com.newwind.nwtweaks.world.items.PillItem;
 import croissantnova.sanitydim.entity.InnerEntity;
 import de.cadentem.cave_dweller.entities.CaveDwellerEntity;
@@ -55,6 +56,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.event.enchanting.EnchantmentLevelSetEvent;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
+import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.ShieldBlockEvent;
@@ -64,6 +66,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -380,6 +383,11 @@ public class CommonEvents {
 											serverPlayerData1.setDiscoveredPills(serverPlayerData.getDiscoveredPills())));
 			event.getOriginal().invalidateCaps();
 		}
+	}
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public static void onPlayerDeath(LivingDropsEvent event) {
+		LootBag.createFromDropEvent(event);
 	}
 
 	@SubscribeEvent

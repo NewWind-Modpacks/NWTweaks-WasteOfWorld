@@ -21,6 +21,8 @@
   "death.attack.toxic_gas": "%1$s respiró gas tóxico",
   "death.attack.toxic_gas.player": "%1$s's respiró gas tóxico intentando escapar de %2$s",
   "enchantment.nwtweaks.deep_pockets": "Bolsillos profundos",
+  "entity.nwtweaks.loot_bag": "Bolsa de botín",
+  "entity.nwtweaks.loot_bag.owned_name": "Botín de %s",
   "item.nwtweaks.andesite_rock": "Roca de andesita",
   "item.nwtweaks.blackstone_rock": "Roca de piedra negra",
   "item.nwtweaks.broken_iron_sword": "Espada rota",

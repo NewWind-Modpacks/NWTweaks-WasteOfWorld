@@ -3,15 +3,23 @@ package com.newwind.nwtweaks.mixin.client;
 import com.newwind.nwtweaks.NWConfig;
 import com.newwind.nwtweaks.access.IPostProcessRenderizable;
 import com.newwind.nwtweaks.client.NWClient;
+import com.newwind.nwtweaks.world.entities.LootBag;
 import croissantnova.sanitydim.client.PostProcessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
+import org.objectweb.asm.Opcodes;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(GameRenderer.class)
 public abstract class MinecraftGameRenderer {
@@ -32,6 +40,8 @@ public abstract class MinecraftGameRenderer {
 //		Minecraft mc = Minecraft.getInstance();
 //		mc.gameRenderer.loadEffect(nWTweaks$winterShader);
 //	}
+
+	@Shadow @Final private Minecraft minecraft;
 
 	@Inject(
 					method = "render(FJZ)V",
@@ -56,7 +66,7 @@ public abstract class MinecraftGameRenderer {
 				});
 			}
 			if (NWClient.postProcessor != null)
-				((IPostProcessRenderizable) (Object) NWClient.postProcessor).nWTweaks$alwaysRender(pPartialTicks);
+				((IPostProcessRenderizable) NWClient.postProcessor).nWTweaks$alwaysRender(pPartialTicks);
 		}
 	}
 
@@ -75,6 +85,21 @@ public abstract class MinecraftGameRenderer {
 	public void togglePostEffect() {
 		if (!NWConfig.Client.BLOCK_SHADER_TOGGLE.get())
 			this.effectActive = !this.effectActive;
+	}
+
+	@Inject(
+					method = "pick",
+					at = @At(
+									value = "FIELD",
+									target = "Lnet/minecraft/client/Minecraft;hitResult:Lnet/minecraft/world/phys/HitResult;",
+									opcode = Opcodes.PUTFIELD,
+									ordinal = 1
+					),
+					locals = LocalCapture.CAPTURE_FAILHARD
+	)
+	private void showNames(float p_109088_, CallbackInfo ci, Entity entity, double d0, Vec3 vec3, boolean flag, int i, double d1, double atkRange, Vec3 vec31, Vec3 vec32, float f, AABB aabb, EntityHitResult entityhitresult, Entity entity1, Vec3 vec33, double d2) {
+		if (entity1 instanceof LootBag)
+			this.minecraft.crosshairPickEntity = entity1;
 	}
 
 }

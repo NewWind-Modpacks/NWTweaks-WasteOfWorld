@@ -1,11 +1,7 @@
 package com.newwind.nwtweaks;
 
 import com.mojang.logging.LogUtils;
-import com.newwind.nwtweaks.registries.Attributes;
-import com.newwind.nwtweaks.registries.Blocks;
-import com.newwind.nwtweaks.registries.Enchantments;
-import com.newwind.nwtweaks.registries.Items;
-
+import com.newwind.nwtweaks.registries.*;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -36,6 +32,7 @@ public class NWTweaks {
 
         Items.ITEMS.register(bus);
         Blocks.BLOCKS.register(bus);
+        EntityTypes.ENTITY_TYPES.register(bus);
         Attributes.ATTRIBUTES.register(bus);
         Enchantments.ENCHANTMENTS.register(bus);
 

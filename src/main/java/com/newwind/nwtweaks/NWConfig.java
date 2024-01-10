@@ -48,6 +48,7 @@ public class NWConfig {
 		public static final ForgeConfigSpec.BooleanValue CONTAINER_DROP_INPUT_INSTANTLY;
 		public static final ForgeConfigSpec.DoubleValue NUTRITION_MIN_DIFFERENCE;
 		public static final ForgeConfigSpec.DoubleValue NUTRITION_MAX_DIFFERENCE;
+		public static final ForgeConfigSpec.LongValue PLAYER_LOOT_BAG_DESPAWN_TIME;
 
 		static {
 
@@ -85,6 +86,11 @@ public class NWConfig {
 							.defineInRange("Container Company Range", 64D, 0D, 1024D);
 			CONTAINER_DROP_INPUT_INSTANTLY = BUILDER.comment("Drop a container's input the moment it's inactive or when the output drops (true for the former).")
 							.define("Container Drop Input Instantly", true);
+			BUILDER.pop();
+
+			BUILDER.push("Loot Bags");
+			PLAYER_LOOT_BAG_DESPAWN_TIME = BUILDER.comment("The amount of time that it takes for a (player) loot bag to despawn")
+							.defineInRange("Player Loot Bag Despawn Time", 6000L, 0L, Long.MAX_VALUE);
 			BUILDER.pop();
 
 			BUILDER.comment("Underground air is unbreathable and the darkness consumes.")

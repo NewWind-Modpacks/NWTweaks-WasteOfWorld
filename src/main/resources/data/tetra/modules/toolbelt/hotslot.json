@@ -1,0 +1,67 @@
+{
+    "replace": true,
+    "type": "tetra:toolbelt_module",
+    "slots": [ "toolbelt/slot1", "toolbelt/slot2", "toolbelt/slot3" ],
+    "slotSuffixes": [ "_slot1", "_slot2", "_slot3" ],
+    "variants": [
+        {
+            "key": "hotslot1",
+            "integrity": -1,
+            "glyph": {
+                "textureLocation": "nwtweaks:textures/gui/tetra_glyphs.png",
+                "tint": "866526"
+            },
+            "effects": {
+                "nwtweaks.hotslot": 1
+            },
+            "aspects": {
+                "hotslot": 1
+            }
+        },
+        {
+            "key": "hotslot2",
+            "integrity": -2,
+            "glyph": {
+                "textureLocation": "nwtweaks:textures/gui/tetra_glyphs.png",
+                "textureX": 16,
+                "tint": "866526"
+            },
+            "effects": {
+                "nwtweaks.hotslot": 2
+            },
+            "aspects": {
+                "hotslot": 2
+            }
+        },
+        {
+            "key": "hotslot3",
+            "integrity": -3,
+            "glyph": {
+                "textureLocation": "nwtweaks:textures/gui/tetra_glyphs.png",
+                "textureX": 32,
+                "tint": "866526"
+            },
+            "effects": {
+                "nwtweaks.hotslot": 3
+            },
+            "aspects": {
+                "hotslot": 3
+            }
+        },
+        {
+            "key": "hotslot4",
+            "integrity": -4,
+            "glyph": {
+                "textureLocation": "nwtweaks:textures/gui/tetra_glyphs.png",
+                "textureX": 48,
+                "tint": "866526"
+            },
+            "effects": {
+                "nwtweaks.hotslot": 4
+            },
+            "aspects": {
+                "hotslot": 4
+            }
+        }
+    ]
+}

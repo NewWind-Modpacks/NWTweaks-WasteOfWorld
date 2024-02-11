@@ -5,6 +5,7 @@ import com.newwind.nwtweaks.NWConfig;
 import com.newwind.nwtweaks.NWTweaks;
 import com.newwind.nwtweaks.client.NWClient;
 import com.newwind.nwtweaks.client.gui.SanityClassicBar;
+import com.newwind.nwtweaks.client.gui.TetraStats;
 import com.newwind.nwtweaks.client.world.entity.model.LootBagModel;
 import com.newwind.nwtweaks.client.world.entity.renderer.LootBagRenderer;
 import com.newwind.nwtweaks.client.world.item.renderer.AirBladderDecorator;
@@ -188,6 +189,7 @@ public class ClientEvents {
 
 					return pillType;
 				});
+				TetraStats.addBar();
 			});
 		}
 

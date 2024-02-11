@@ -46,7 +46,6 @@
     "client.CBBarOverlayImpl",
     "client.CBEventHandler",
     "client.CBHunger",
-    "client.CBStaminaB",
     "client.CDCaveDwellerEyesLayer",
     "client.CGMAimingHandler",
     "client.CGMCrosshairHandler",

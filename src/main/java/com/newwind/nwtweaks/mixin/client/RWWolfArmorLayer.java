@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(WolfArmorLayer.class)
+@Mixin(value = WolfArmorLayer.class, remap = false)
 public class RWWolfArmorLayer {
 
 	@Mutable

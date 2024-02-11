@@ -1,0 +1,32 @@
+{
+    "replace": true,
+    "slots": [
+        "toolbelt/slot1",
+        "toolbelt/slot2",
+        "toolbelt/slot3"
+    ],
+    "keySuffixes": [
+        "_slot1",
+        "_slot2",
+        "_slot3"
+    ],
+    "materialSlotCount": 1,
+    "glyph": {
+        "textureLocation": "nwtweaks:textures/gui/tetra_glyphs.png",
+        "textureX": 48
+    },
+    "displayType": "major",
+    "outcomes": [
+        {
+            "material": {
+                "items": [ "minecraft:leather" ],
+                "count": 8
+            },
+            "requiredTools": {
+                "cut": "minecraft:iron"
+            },
+            "moduleKey": "toolbelt/hotslot",
+            "moduleVariant": "hotslot4"
+        }
+    ]
+}

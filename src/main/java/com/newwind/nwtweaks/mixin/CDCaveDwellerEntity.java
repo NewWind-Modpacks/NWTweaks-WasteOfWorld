@@ -77,7 +77,7 @@ public abstract class CDCaveDwellerEntity extends Monster implements ICaveDwelle
 	private void makeRedPersistent(CallbackInfo ci) {
 		AtomicBoolean isRedDweller = new AtomicBoolean(false);
 		this.getCapability(RedDwellerProvider.CAPABILITY).ifPresent(redDweller -> isRedDweller.set(redDweller.isRedDweller()));
-		if (isRedDweller.get() && (Utils.isValidPlayer(this.getTarget()) || this.getTarget().isInvisible()))
+		if (isRedDweller.get() && (Utils.isValidTarget(this.getTarget()) || this.getTarget().isInvisible()))
 			ci.cancel();
 	}
 
@@ -93,7 +93,7 @@ public abstract class CDCaveDwellerEntity extends Monster implements ICaveDwelle
 	@Override
 	public boolean hurt(DamageSource source, float damage) {
 		Entity entity = source.getEntity();
-		if (entity != null && entity.equals(this.getTarget()) && Utils.isValidPlayer(entity))
+		if (entity != null && entity.equals(this.getTarget()) && Utils.isValidTarget(entity))
 			nWTweaks$hasBeenHitByPlayer = (Player) entity;
 
 		return super.hurt(source, damage);

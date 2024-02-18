@@ -9,12 +9,12 @@ public class ServerPlayerData {
 
 
 	public void initialize(int size) {
-		if (!isInitialized())
+		if (notInitialized())
 			this.discoveredPills = new boolean[size];
 	}
 
-	public boolean isInitialized() {
-		return this.discoveredPills.length != 1;
+	public boolean notInitialized() {
+		return this.discoveredPills.length == 1;
 	}
 
 	public boolean getDiscoveredPill(int slot) {

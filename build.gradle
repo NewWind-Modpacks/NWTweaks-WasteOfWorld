@@ -144,6 +144,8 @@ repositories {
         }
     }
 
+    maven { url = "https://jitpack.io" }
+
     maven {
         url "https://maven.pkg.github.com/NewWind-Modpacks/actions-of-stamina"
         credentials {
@@ -160,6 +162,11 @@ repositories {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.19.2-43.3.8'
+    implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-common:0.1.2-beta.4"))
+    implementation(jarJar("com.github.bawnorton.mixinsquared:mixinsquared-forge:0.1.2-beta.4")) {
+        //noinspection GroovyAssignabilityCheck
+        jarJar.ranged(it, "[0.1.2-beta.4,)")
+    }
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     // [Implementation] Source: Rehosted

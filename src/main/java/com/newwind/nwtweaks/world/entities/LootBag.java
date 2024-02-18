@@ -53,10 +53,6 @@ public class LootBag extends Entity implements ContainerEntity, IRestrictedConta
 		this.spawnTime = 0;
 	}
 
-	public void setNameFromPlayer(Player player) {
-		this.setCustomName(Component.translatable("entity.nwtweaks.loot_bag.owned_name", player.getName()));
-	}
-
 	public static void createFromDropEvent(LivingDropsEvent event) {
 		Collection<ItemEntity> drops = event.getDrops();
 		if (drops.isEmpty())
@@ -86,23 +82,25 @@ public class LootBag extends Entity implements ContainerEntity, IRestrictedConta
 				NonNullList<ItemStack> itemStacks = lootBag.getItemStacks();
 				for (ItemEntity itemEntity : drops) {
 					ItemStack itemStack = itemEntity.getItem();
-					boolean hasBeenPlaced = false;
-					for (int slotNum = 0; slotNum < LootBag.CONTAINER_SIZE && !hasBeenPlaced; slotNum++) {
-						ItemStack slotStack = itemStacks.get(slotNum);
-						if (slotStack.isEmpty()) {
-							itemStacks.set(slotNum, itemStack);
-							itemEntity.discard();
-							hasBeenPlaced = true;
-						} else {
-							int maxStackSize = slotStack.getMaxStackSize();
-							if (slotStack.sameItem(itemStack) && slotStack.getCount() < maxStackSize) {
-								int splitCount = Math.min(maxStackSize - slotStack.getCount(), itemStack.getCount());
-								int toAdd = itemStack.split(splitCount).getCount();
-								slotStack.setCount(slotStack.getCount() + toAdd);
+					if (!itemStack.isEmpty()) {
+						boolean hasBeenPlaced = false;
+						for (int slotNum = 0; slotNum < LootBag.CONTAINER_SIZE && !hasBeenPlaced; slotNum++) {
+							ItemStack slotStack = itemStacks.get(slotNum);
+							if (slotStack.isEmpty()) {
+								itemStacks.set(slotNum, itemStack);
+								itemEntity.discard();
+								hasBeenPlaced = true;
+							} else {
+								int maxStackSize = slotStack.getMaxStackSize();
+								if (slotStack.sameItem(itemStack) && slotStack.getCount() < maxStackSize) {
+									int splitCount = Math.min(maxStackSize - slotStack.getCount(), itemStack.getCount());
+									int toAdd = itemStack.split(splitCount).getCount();
+									slotStack.setCount(slotStack.getCount() + toAdd);
 
-								if (itemStack.isEmpty()) {
-									itemEntity.discard();
-									hasBeenPlaced = true;
+									if (itemStack.isEmpty()) {
+										itemEntity.discard();
+										hasBeenPlaced = true;
+									}
 								}
 							}
 						}
@@ -111,6 +109,10 @@ public class LootBag extends Entity implements ContainerEntity, IRestrictedConta
 				level.addFreshEntity(lootBag);
 			}
 		}
+	}
+
+	public void setNameFromPlayer(Player player) {
+		this.setCustomName(Component.translatable("entity.nwtweaks.loot_bag.owned_name", player.getName()));
 	}
 
 	public TYPE getBagType() {

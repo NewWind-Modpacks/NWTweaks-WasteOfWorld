@@ -1,5 +1,6 @@
 package com.newwind.nwtweaks;
 
+import com.newwind.nwtweaks.util.DeathUtil;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -49,6 +50,7 @@ public class NWConfig {
 		public static final ForgeConfigSpec.DoubleValue NUTRITION_MIN_DIFFERENCE;
 		public static final ForgeConfigSpec.DoubleValue NUTRITION_MAX_DIFFERENCE;
 		public static final ForgeConfigSpec.LongValue PLAYER_LOOT_BAG_DESPAWN_TIME;
+		public static final ForgeConfigSpec.ConfigValue<List<? extends String>> PLAYER_ITEMS_DEATH_MODS;
 
 		static {
 
@@ -88,9 +90,22 @@ public class NWConfig {
 							.define("Container Drop Input Instantly", true);
 			BUILDER.pop();
 
-			BUILDER.push("Loot Bags");
+			BUILDER.push("Death");
 			PLAYER_LOOT_BAG_DESPAWN_TIME = BUILDER.comment("The amount of time that it takes for a (player) loot bag to despawn")
 							.defineInRange("Player Loot Bag Despawn Time", 6000L, 0L, Long.MAX_VALUE);
+			PLAYER_ITEMS_DEATH_MODS = BUILDER.comment("""
+											The items that stay in the loot bag on death, format is as follows: "<type>,<parameters>,<keepAmount>,<destroyAmount>"
+											First match from top to bottom is applied.
+											"keepAmount" and "destroyAmount" must both be between 0 and 1.
+											Available types and it's parameters:
+											· any: No parameters, matches anything.
+											· stackable: "<min>-<max>" Filters by items that can be stacked up to an amount between "min" and "max" (both inclusive), using zero will ignore the bound.
+											· item: "<namespace:item_name>" Filters by a specific item.""")
+							.defineList("Player Items", List.of(
+											"hasnbt,true,1,0",
+											"stackable,2-0,0.25,0.4",
+											"any,,1,0"
+							), i -> i instanceof String rawPredicate && DeathUtil.generateOptions(rawPredicate) != null);
 			BUILDER.pop();
 
 			BUILDER.comment("Underground air is unbreathable and the darkness consumes.")

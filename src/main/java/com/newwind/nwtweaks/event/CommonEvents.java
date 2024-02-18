@@ -13,10 +13,7 @@ import com.newwind.nwtweaks.networking.packet.S2CIsUnderground;
 import com.newwind.nwtweaks.networking.packet.S2CRedDweller;
 import com.newwind.nwtweaks.registries.Attributes;
 import com.newwind.nwtweaks.registries.Blocks;
-import com.newwind.nwtweaks.util.BreakChecks;
-import com.newwind.nwtweaks.util.CommonUtils;
-import com.newwind.nwtweaks.util.ExpirableUtils;
-import com.newwind.nwtweaks.util.RadUtil;
+import com.newwind.nwtweaks.util.*;
 import com.newwind.nwtweaks.world.blocks.ChippedBlock;
 import com.newwind.nwtweaks.world.entities.LootBag;
 import com.newwind.nwtweaks.world.items.PillItem;
@@ -69,6 +66,8 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.network.PacketDistributor;
 import nuparu.tinyinv.utils.Utils;
@@ -368,7 +367,7 @@ public class CommonEvents {
 	public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
 		ServerPlayer player = (ServerPlayer) event.getEntity();
 		player.getCapability(ServerPlayerDataProvider.CAPABILITY).ifPresent(serverPlayerData -> {
-			if (!serverPlayerData.isInitialized())
+			if (serverPlayerData.notInitialized())
 				serverPlayerData.initialize(PillItem.getSlotSize());
 		});
 		ModMessages.sendToClient(new S2CDiscoveredPills(PillItem.getIntSlots(player)), player);
@@ -450,6 +449,22 @@ public class CommonEvents {
 		@SubscribeEvent
 		public static void onModInit(FMLCommonSetupEvent event) {
 			//SanityProcessor.PASSIVE_SANITY_SOURCES.add(new Temperature());
+		}
+
+		@SubscribeEvent
+		public static void onConfigReload(ModConfigEvent.Reloading event) {
+			ModConfig config = event.getConfig();
+			if (config.getType() == ModConfig.Type.COMMON && config.getModId().equals(NWTweaks.MODID)) {
+				DeathUtil.reloadCache();
+			}
+		}
+
+		@SubscribeEvent
+		public static void onConfigLoad(ModConfigEvent.Loading event) {
+			ModConfig config = event.getConfig();
+			if (config.getType() == ModConfig.Type.COMMON && config.getModId().equals(NWTweaks.MODID)) {
+				DeathUtil.reloadCache();
+			}
 		}
 
 	}
